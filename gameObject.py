@@ -9,5 +9,4 @@ class GameObject:
     self.y = y
     self.w = w
     self.h = h
-    
 
