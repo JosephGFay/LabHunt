@@ -18,7 +18,7 @@ class GameInstance:
         self.game_window = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption('Lab Hunt')
 
-        self.tick_rate = 60
+        self.tick_rate = 120
 
         self.clock = pygame.time.Clock()
 
@@ -30,8 +30,9 @@ class GameInstance:
         self.player_direction_x = 0
 
         self.hacker = Hacker(200, 200, 64, 64, 'assets/Hacker_02.png')
+        self.hacker2 = Hacker(400, 200, 64, 64, 'assets/Hacker_02.png')
     
-
+        self.objects = [self.hacker, self.hacker2]
     def detected_collision(self, object1, object2):
         if (object1.x + object1.w) < object2.x:
             return False
@@ -50,8 +51,9 @@ class GameInstance:
         #                       (self.background.x, self.background.y))
         self.game_window.fill(blue)
 
-        self.game_window.blit(self.hacker.img, (self.hacker.x, self.hacker.y))
-
+        for object in self.objects:
+          self.game_window.blit(object.img, (object.x, object.y))
+          
         for i, j in self.player.imgs:
             self.game_window.blit(i, j)
         pygame.display.update()
@@ -81,6 +83,6 @@ class GameInstance:
                         self.player_direction_y = 0
                     elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                         self.player_direction_x = 0
-            self.player.move_x(self.player_direction_x, self.WIDTH)
-            self.player.move_y(self.player_direction_y, self.HEIGHT, self.hacker)
+            self.player.move_x(self.player_direction_x, self.WIDTH, self.objects)
+            self.player.move_y(self.player_direction_y, self.HEIGHT, self.objects)
             self.clock.tick(self.tick_rate)
