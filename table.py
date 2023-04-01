@@ -12,9 +12,9 @@ class Table(GameObject):
     self.render()
     self.top_seat = (
       # X
-      (self.x) + 46,
+      (self.x) + 52,
       # y
-      self.y - 64
+      self.y- 32
     )
     self.right_seat = (
       # X
@@ -32,14 +32,14 @@ class Table(GameObject):
       # X
       (self.x) + 46,
       # y
-      (self.y + self.h)
+      (self.y + self.h - 60)
     )
     
 
-    self.npc_top = NPC(self.top_seat[0], self.top_seat[1], 60 , 100, 'assets/nuetral.png')
+    self.npc_top = NPC(self.top_seat[0], self.top_seat[1], 55 , 55, 'assets/npc_top.png')
     self.npc_right = NPC(self.right_seat[0], self.right_seat[1], 60 , 100, 'assets/npc_right.png')
     self.npc_left = NPC(self.left_seat[0], self.left_seat[1], 60 , 100, 'assets/npc_left.png')
-    self.npc_bottom = NPC(self.bottom_seat[0], self.bottom_seat[1], 60 , 100, 'assets/nuetral.png')
+    self.npc_bottom = NPC(self.bottom_seat[0], self.bottom_seat[1], 60 , 100, 'assets/npc_bottom.png')
 
     
     self.npcs = [self.npc_top, self.npc_right, self.npc_left, self.npc_bottom]
@@ -56,6 +56,7 @@ class Table(GameObject):
   def get_hacker(self, npc_list):
     infected_seat = random.randint(0, 3)
     npc_list[infected_seat].infected = True
+    npc_list[infected_seat].infected_seat = infected_seat
     
 
   

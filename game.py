@@ -16,7 +16,7 @@ class GameInstance:
     def __init__(self):
         pygame.init()
         self.WIDTH = 1200
-        self.HEIGHT = 1000
+        self.HEIGHT = 900
         self.game_window = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption('Lab Hunt')
 
@@ -34,11 +34,11 @@ class GameInstance:
         self.menu = GameBar(0, 0, self.WIDTH, 32, 'assets/gamebar.png')
 
         self.table0 = Table(100, 500, 160, 160, 'assets/table_red.png', '0')
-        self.table1 = Table(100, 100, 160, 160, 'assets/table_blue.png', '1')
-        self.table2 = Table(800, 750, 160, 160, 'assets/table_blue.png', '2')
-        self.table3 = Table(400, 750, 160, 160, 'assets/table_red.png', '3')
-        self.table4 = Table(500, 350, 160, 160, 'assets/table_blue.png', '4')
-        self.table5 = Table(800, 100, 160, 160, 'assets/table_red.png', '5')
+        self.table1 = Table(100, 250, 160, 160, 'assets/table_blue.png', '1')
+        self.table2 = Table(900, 650, 160, 160, 'assets/table_blue.png', '2')
+        self.table3 = Table(450, 650, 160, 160, 'assets/table_red.png', '3')
+        self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4')
+        self.table5 = Table(900, 250, 160, 160, 'assets/table_red.png', '5')
 
         self.tables = [
             self.table0,
