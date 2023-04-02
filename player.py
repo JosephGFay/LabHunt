@@ -9,13 +9,15 @@ class Player(GameObject):
 
   def __init__(self, x, y, w, h, img):
     super().__init__(x, y, w, h, img)
+    self.can_interact = False
     self.render()
     
   def move_y(self, direction, max_height, objects):
     for object_list in objects:
       for object in object_list:
         # Check window boundaries
-        if (self.y >= max_height - self.h and direction > 0) or (self.y <= 0 and direction < 0):
+        if (self.y >= max_height - self.h and direction > 0) or (self.y <= 200 and direction < 0):
+          self.can_interact = True
           return 
     
         # Top collision
@@ -24,6 +26,7 @@ class Player(GameObject):
           # Check if player is within the the bounds of object x and x + w on coordinate plane
           if (self.x >= object.x and self.x <= object.x + object.w) or (self.x + self.w > object.x and self.x + self.w < object.x+ object.w):
             if direction < 0:
+              self.can_interact = True
               return
   
         # Bottom collision
@@ -32,19 +35,22 @@ class Player(GameObject):
           # Check if player is within the the bounds of object x and x + w on coordinate plane
           if (self.x >= object.x and self.x <= object.x + object.w) or (self.x + self.w > object.x and self.x + self.w < object.x+ object.w):
             if direction > 0:
+              self.can_interact = True
               return
     
       # Move
     self.y += (direction * 2)
     self.render()
-    
-
+    if direction != 0:
+      self.can_interact = False
+  
   def move_x(self, direction, max_width, objects):
     # Check window boundaries
     for object_list in objects:
       for object in object_list:
         # Check window boundaries
         if (self.x >= max_width - self.w and direction > 0) or (self.x <= 0 and direction < 0):
+          self.can_interact = True
           return
           
         # Left collision
@@ -53,6 +59,7 @@ class Player(GameObject):
           # Check if player is within the the bounds of object y and y + h on coordinate plane
           if (self.y >= object.y and self.y <= object.y + object.h) or (self.y + self.h > object.y and self.y + self.h < object.y+ object.h):
             if direction < 0:
+              self.can_interact = True
               return
   
         # Right collision
@@ -61,15 +68,18 @@ class Player(GameObject):
           # Check if player is within the the bounds of object y and y + h on coordinate plane
           if (self.y >= object.y and self.y <= object.y + object.h) or (self.y + self.h > object.y and self.y + self.h < object.y+ object.h):
             if direction > 0:
+              self.can_interact = True
               return
         
     self.x += (direction * 2)
     self.render()
+    if direction != 0:
+      self.can_interact = False
     
   def render(self):
     
     self.font = pygame.font.Font('freesansbold.ttf', 32)
-    self.text = self.font.render(f'{self.x},{self.y}', True, green)
+    self.text = self.font.render('E to Interact' if self.can_interact else f'{self.x},{self.y}', True, green)
     self.textRect = self.text.get_rect()
     self.textRect.center = (self.x+30, self.y -30)
     self.imgs = [(self.img, (self.x, self.y)), (self.text, self.textRect)]

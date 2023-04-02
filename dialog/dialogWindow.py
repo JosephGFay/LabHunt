@@ -1,6 +1,5 @@
 import pygame
 from gameObject import GameObject
-from dialog.textObject import TextObject
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)

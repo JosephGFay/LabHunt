@@ -24,15 +24,15 @@ class GameInstance:
         # Establish Game Objects
         self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT,
                                      'assets/carpet.png')
-        self.player = Player(400, 400, 64, 64, 'assets/green.png')
+        self.player = Player(400, 400, 50, 64, 'assets/admin_top.png')
 
         self.player_direction_y = 0
         self.player_direction_x = 0
 
         self.menu = GameBar(0, 0, self.WIDTH, 32, 'assets/gamebar.png')
 
-        self.table0 = Table(100, 500, 160, 160, 'assets/table_red.png', '0')
-        self.table1 = Table(100, 250, 160, 160, 'assets/table_blue.png', '1')
+        self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0')
+        self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1')
         self.table2 = Table(900, 670, 160, 160, 'assets/table_blue.png', '2')
         self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3')
         self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4')
@@ -66,19 +66,33 @@ class GameInstance:
                     # Y
                     if event.key == pygame.K_UP:
                         self.player_direction_y = -1
+                        img = pygame.image.load('assets/admin_bottom.png').convert_alpha()
+                        self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
                     elif event.key == pygame.K_DOWN:
                         self.player_direction_y = 1
-                # X
+                        img = pygame.image.load('assets/admin_top.png').convert_alpha()
+                        self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
+                  
                     elif event.key == pygame.K_LEFT:
                         self.player_direction_x = -1
+                        img = pygame.image.load('assets/admin_right.png').convert_alpha()
+                        self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
+                  
                     elif event.key == pygame.K_RIGHT:
                         self.player_direction_x = 1
+                        img = pygame.image.load('assets/admin_left.png').convert_alpha()
+                        self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
+                  
+                    elif event.key == pygame.K_e and self.player.can_interact:
+                        SplashWindow(self, 'INTERACTING')
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         self.player_direction_y = 0
+                    
                     elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                         self.player_direction_x = 0
+                      
             self.player.move_x(self.player_direction_x, self.WIDTH,
                                self.objects)
             self.player.move_y(self.player_direction_y, self.HEIGHT,
@@ -102,15 +116,18 @@ class GameInstance:
         for object_list in self.objects:
             for object in object_list:
                 self.game_window.blit(object.img, (object.x, object.y))
-        # Draw Player
-        for i, j in self.player.imgs:
-            self.game_window.blit(i, j)
+        
         # Draw Table List
         for table in self.tables:
             self.game_window.blit(table.img, (table.x, table.y))
             self.game_window.blit(table.text, table.textRect)
             for npc in table.npcs:
                 self.game_window.blit(npc.img, (npc.x, npc.y))
+
+        # Draw Player
+        for i, j in self.player.imgs:
+            self.game_window.blit(i, j)
+          
         # Update game display
         pygame.display.update()
 
