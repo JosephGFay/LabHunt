@@ -1,10 +1,10 @@
 import pygame
-from gameObject import GameObject
+from gameObjects.gameObject import GameObject
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
-class DialogWindow(GameObject):
+class Dialog(GameObject):
   def __init__(self, game_instance, string):
     x = 400
     y = 200
@@ -22,14 +22,14 @@ class DialogWindow(GameObject):
   def set_header(self, string, game_instance):
     self.font = pygame.font.Font('freesansbold.ttf', 20)
     self.header = self.font.render(string, True, white)
-    self.headerRect = self.header.get_rect(x=self.x, y=self.y)
+    self.headerRect = self.header.get_rect(x=self.x+10, y=self.y+20)
     game_instance.game_window.blit(self.header, self.headerRect)
     
   
   def set_footer(self, game_instance ):
     self.font = pygame.font.Font('freesansbold.ttf', 10)
     self.footer = self.font.render('Press ESC to close dialog...', True, white)
-    self.footerRect = self.footer.get_rect(x=self.x+30, y=self.y+self.h-60)
+    self.footerRect = self.footer.get_rect(x=self.x, y=self.y+self.h-60)
     game_instance.game_window.blit(self.footer, self.footerRect)
 
   def run_dialog(self, game_instance):

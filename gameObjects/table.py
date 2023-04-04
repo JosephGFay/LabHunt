@@ -1,5 +1,5 @@
-from gameObject import GameObject
-from npc import NPC
+from gameObjects.gameObject import GameObject
+from gameObjects.npc import NPC
 import pygame
 import random
 green = (0, 255, 0)
@@ -9,6 +9,7 @@ class Table(GameObject):
   def __init__(self, x, y, w, h, img, name):
     super().__init__(x, y, w, h, img, name)
     self.infected = False
+    self.interactable = True
     self.render()
     self.top_seat = (
       # X

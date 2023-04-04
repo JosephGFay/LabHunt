@@ -1,15 +1,15 @@
 import pygame
-from gameObject import GameObject
+from gameObjects.gameObject import GameObject
 
 white = (255, 255, 255)
 green = (0, 255, 0)
-blue = (0, 0, 128)
+blue = (32, 32, 49)
 
 
-class GameBar(GameObject):
+class ToolBar(GameObject):
 
     def __init__(self, x, y, w, h, img):
         super().__init__(x, y, w, h, img)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
-        self.text = self.font.render('LAB HUNT', True, green, blue)
+        self.text = self.font.render('Tools', True, white, blue)
         self.textRect = self.text.get_rect()
