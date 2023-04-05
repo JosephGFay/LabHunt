@@ -1,5 +1,6 @@
 # Import Pygame and System Utilities
-import pygame, sys
+import pygame
+import sys
 from pygame.locals import QUIT
 
 # Import Game Objects
@@ -24,6 +25,7 @@ white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
+
 class GameInstance:
     def __init__(self):
         # Initial PyGame Window Setup
@@ -43,16 +45,16 @@ class GameInstance:
         self.dialog_running = False
         # Initialize the interaction_running state. (Off by Default)
         self.interaction_running = False
-      
+
         # Establish Game Objects
         # Initialize the background image
-        self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT,'assets/carpet.png')
-        
+        self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT, 'assets/carpet.png')
+
         # Initialize Player                           
         self.player = Player(400, 400, 50, 64, 'assets/admin_top.png')
         self.player_direction_y = 0
         self.player_direction_x = 0
-        
+
         # Initialize Toolbar
         self.menu = ToolBar(0, 0, self.WIDTH, 32, 'assets/gamebar.png')
 
@@ -76,14 +78,14 @@ class GameInstance:
 
         # Populate a random chair in a random table with the hacker.
         self.set_hacker(self.tables)
-      
+
         # Initialize the Server Object
         self.server = Server(900, 480, 120, 120, 'assets/red.png')
 
         # Initialize and populate the objects list of lists.
         self.objects = [
-          self.tables,
-          [self.server],
+            self.tables,
+            [self.server],
         ]
 
     def game_loop(self):
@@ -91,7 +93,9 @@ class GameInstance:
         self.draw_objects()
         # Display the splash screen to the player.
         InteractiveWindow().display(self)
-        SplashDialog(self,'Welcome to lab Hunt!')
+
+        SplashDialog(self, 'Welcome to lab Hunt!')
+
         while True:
             # Update the screen.
             self.draw_objects()
@@ -104,15 +108,15 @@ class GameInstance:
                     sys.exit()
                 # Event Listener for key press
                 if event.type == pygame.KEYDOWN:
-                    
-                  # Listen for 'W' Key
+
+                    # Listen for 'W' Key
                     if event.key == pygame.K_w:
                         # Subtract from players 'y' value to render upward movement.
                         self.player_direction_y = -1
                         # Load appropriate sprite
                         img = pygame.image.load('assets/admin_bottom.png').convert_alpha()
                         self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
-                    
+
                     # Listen for 'S' Key
                     elif event.key == pygame.K_s:
                         # Add to players 'y' value to render downward movement.
@@ -120,22 +124,22 @@ class GameInstance:
                         # Load appropriate sprite
                         img = pygame.image.load('assets/admin_top.png').convert_alpha()
                         self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
-                    
+
                     # Listen for 'A' Key
                     elif event.key == pygame.K_a:
                         self.player_direction_x = -1
                         # Load appropriate sprite
                         img = pygame.image.load('assets/admin_right.png').convert_alpha()
                         self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
-                    
+
                     # Listen for 'D' Key
                     elif event.key == pygame.K_d:
                         self.player_direction_x = 1
                         # Load appropriate sprite
                         img = pygame.image.load('assets/admin_left.png').convert_alpha()
                         self.player.img = pygame.transform.scale(img, (self.player.w, self.player.h))
-                    
-                      # Listen for 'E' Key
+
+                    # Listen for 'E' Key
                     elif event.key == pygame.K_e and self.player.can_interact:
                         InteractionDialog(self, 'INTERACTING')
 
@@ -149,22 +153,22 @@ class GameInstance:
                     elif event.key == pygame.K_a or event.key == pygame.K_d:
                         # Stop the players horizontal movement
                         self.player_direction_x = 0
-            
-            # End Event Listners
+
+            # End Event Listeners
 
             # Handle Player Movement.
             # Each movement function takes in 3 parameters.
             # Direction - Which direction the character is currently moving based on key press.
             # Max Width/Max Height - Supplies the boundaries for the window to contain player.
-            # Objects - Provides a list of lists which contain all collideable objects.
+            # Objects - Provides a list of lists which contain all collide-able objects.
             self.player.move_x(self.player_direction_x, self.WIDTH, self.objects)
             self.player.move_y(self.player_direction_y, self.HEIGHT, self.objects)
-                               
+
             self.clock.tick(self.tick_rate)
 
     def draw_objects(self):
         # Function the draw all objects on the screen.
-        
+
         # Draw Carpet
         self.game_window.blit(self.background.img,
                               (self.background.x, self.background.y))
@@ -178,9 +182,9 @@ class GameInstance:
                 seat.check_infected()
         # Draw Object List
         for object_list in self.objects:
-            for object in object_list:
-                self.game_window.blit(object.img, (object.x, object.y))
-        
+            for game_object in object_list:
+                self.game_window.blit(game_object.img, (game_object.x, game_object.y))
+
         # Draw Table List
         for table in self.tables:
             self.game_window.blit(table.img, (table.x, table.y))
@@ -191,11 +195,12 @@ class GameInstance:
         # Draw Player
         for i, j in self.player.imgs:
             self.game_window.blit(i, j)
-          
+
         # Update game display
         pygame.display.update()
 
-    def set_hacker(self, table_list):
+    @staticmethod
+    def set_hacker(table_list):
         # Function to establish a hacker within a table list.
         # Choose a table at random
         infected_table = random.randint(0, 5)
