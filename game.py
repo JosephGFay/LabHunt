@@ -16,6 +16,9 @@ from dialog.interactionDialog import InteractionDialog
 from dialog.splashDialog import SplashDialog
 import random
 
+# Import Interactive Windows
+from windows.interactiveWindow import InteractiveWindow
+
 # Global Variables for color usage
 white = (255, 255, 255)
 green = (0, 255, 0)
@@ -38,7 +41,9 @@ class GameInstance:
         self.tick_rate = 120
         # Initialize the dialog_running state. (Off by Default)
         self.dialog_running = False
-        
+        # Initialize the interaction_running state. (Off by Default)
+        self.interaction_running = False
+      
         # Establish Game Objects
         # Initialize the background image
         self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT,'assets/carpet.png')
@@ -73,7 +78,7 @@ class GameInstance:
         self.set_hacker(self.tables)
       
         # Initialize the Server Object
-        self.server = Server(550, 300, 160, 160, 'assets/red.png')
+        self.server = Server(900, 480, 120, 120, 'assets/red.png')
 
         # Initialize and populate the objects list of lists.
         self.objects = [
@@ -85,6 +90,7 @@ class GameInstance:
         # Initial draw of game objects
         self.draw_objects()
         # Display the splash screen to the player.
+        InteractiveWindow().display(self)
         SplashDialog(self,'Welcome to lab Hunt!')
         while True:
             # Update the screen.
