@@ -18,7 +18,7 @@ from dialog.splashDialog import SplashDialog
 import random
 
 # Import Interactive Windows
-from windows.interactiveWindow import InteractiveWindow
+from windows.tableWindow import TableWindow
 
 # Global Variables for color usage
 white = (255, 255, 255)
@@ -92,8 +92,6 @@ class GameInstance:
         # Initial draw of game objects
         self.draw_objects()
         # Display the splash screen to the player.
-        InteractiveWindow().display(self)
-
         SplashDialog(self, 'Welcome to lab Hunt!')
 
         while True:
@@ -141,7 +139,9 @@ class GameInstance:
 
                     # Listen for 'E' Key
                     elif event.key == pygame.K_e and self.player.can_interact:
-                        InteractionDialog(self, 'INTERACTING')
+                        # Check type of object selected
+                        if self.player.adjacent_object.__class__.__name__ == 'Table':
+                            TableWindow().display(self)
 
                 # Event Listener for released keys.
                 if event.type == pygame.KEYUP:

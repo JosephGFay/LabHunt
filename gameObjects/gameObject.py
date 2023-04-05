@@ -19,7 +19,7 @@ class GameObject:
       String path to image file.
     """
 
-    def __init__(self: object, x: int, y: int, w: int, h: int, img: str = None, name: str = None) -> None:
+    def __init__(self, x: int, y: int, w: int, h: int, img: str = None, name: str = None) -> None:
         """
         Constructs the object, giving it a position, a size, and an image.
 
@@ -45,8 +45,9 @@ class GameObject:
             img = pygame.image.load(img).convert_alpha()
             self.img = pygame.transform.scale(img, (w, h))
         # Initialize instance attributes.
-        self.x = xn
+        self.x = x
         self.y = y
         self.w = w
         self.h = h
         self.interactable = False
+        self.selected = False
