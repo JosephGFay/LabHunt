@@ -13,6 +13,10 @@ class Player(GameObject):
         # Variable to store if player is within
         # range of and interactable object
 
+        self.font = None
+        self.text = None
+        self.textRect = None
+        self.imgs = None
         self.can_interact = False
         # Variable to store adjacent interactable object.
         self.adjacent_object = None
@@ -64,7 +68,7 @@ class Player(GameObject):
                 # Left collision
                 # Check if left of player intersects with the right of an object.
                 if self.x == object.x + object.w:
-                    # Check if player is within the the bounds of object y and y + h on coordinate plane
+                    # Check if player is within the bounds of object y and y + h on coordinate plane
                     if (self.y >= object.y and self.y <= object.y + object.h) or (
                             self.y + self.h > object.y and self.y + self.h < object.y + object.h):
                         if direction < 0:
@@ -89,16 +93,23 @@ class Player(GameObject):
     def render(self):
         # Function to handle rendering the player object
         self.font = pygame.font.Font('freesansbold.ttf', 32)
-        self.text = self.font.render(
-            f'E to Interact with {self.adjacent_object.__class__.__name__}' if self.can_interact else f'{self.x},{self.y}',
-            True, green)
+        self.text = self.font.render(f'', True, green)
+
+        # Render different messages if interaction is available.
+        if self.can_interact:
+            # Render Table Interaction
+            if self.adjacent_object.__class__.__name__ == 'Table':
+                self.text = self.font.render(f'E to Attempt Shoulder Surf', True, green)
+            elif self.adjacent_object.__class__.__name__ == 'Server':
+                self.text = self.font.render(f'E to Interact with Server', True, green)
+
         self.textRect = self.text.get_rect()
         self.textRect.center = (self.x + 30, self.y - 30)
         self.imgs = [(self.img, (self.x, self.y)), (self.text, self.textRect)]
 
-    def check_interact(self, object):
+    def check_interact(self, obj):
         # Check for interactable object
-        if object.interactable:
+        if obj.interactable:
             self.can_interact = True
             # Set adjacent object
-            self.adjacent_object = object
+            self.adjacent_object = obj

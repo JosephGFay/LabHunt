@@ -1,4 +1,3 @@
-from windows.ShoulderWindow import ShoulderWindow
 from windows.interactiveWindow import InteractiveWindow
 from windows.ui_Object import UIObject
 from windows.ui_InteractableObject import UIInteractableObject
@@ -9,9 +8,9 @@ from pygame.locals import QUIT
 import Joetilities.utilities
 
 
-class TableWindow(InteractiveWindow):
+class ShoulderWindow(InteractiveWindow):
 
-    def __init__(self, table) -> None:
+    def __init__(self, student) -> None:
         super().__init__()
         self.col_0 = self.x + 45
         self.col_1 = self.x + 45 * 4
@@ -25,32 +24,12 @@ class TableWindow(InteractiveWindow):
         self.row_4 = self.row_3 + 40
 
         self.ui_objects = [
-            # Title
-            TextObject(None, 'Select A Student', self.col_0 + 100, self.row_0, 36),
-            # Player cards
-            UIInteractableObject(self.col_0, self.row_1, 100, 120, 'assets/npc_top.png'),
-            UIInteractableObject(self.col_1, self.row_1, 100, 120, 'assets/npc_top.png'),
-            UIInteractableObject(self.col_2, self.row_1, 100, 120, 'assets/npc_top.png'),
-            UIInteractableObject(self.col_3, self.row_1, 100, 120, 'assets/npc_top.png'),
-            # Names
-            TextObject(None, f'Name: {table.npc_top.name}', self.col_0, self.row_2),
-            TextObject(None, f'Name: {table.npc_right.name}', self.col_1, self.row_2),
-            TextObject(None, f'Name: {table.npc_bottom.name}', self.col_2, self.row_2),
-            TextObject(None, f'Name: {table.npc_left.name}', self.col_3, self.row_2),
-            #  IP
-            TextObject(None, f'IP: {table.npc_top.ip}', self.col_0, self.row_3),
-            TextObject(None, f'IP: {table.npc_right.ip}', self.col_1, self.row_3),
-            TextObject(None, f'IP: {table.npc_bottom.ip}', self.col_2, self.row_3),
-            TextObject(None, f'IP: {table.npc_left.ip}', self.col_3, self.row_3),
-            # MAC
-            TextObject(None, f'MAC: {table.npc_top.mac}', self.col_0, self.row_4, 10),
-            TextObject(None, f'MAC: {table.npc_right.mac}', self.col_1, self.row_4, 10),
-            TextObject(None, f'MAC: {table.npc_bottom.mac}', self.col_2, self.row_4, 10),
-            TextObject(None, f'MAC: {table.npc_left.mac}', self.col_3, self.row_4, 10),
+            TextObject(None, f'{student.name}', self.col_0 + 150, self.row_0, 36),
+            UIInteractableObject(self.x + 40, self.row_0, 100, 120, 'assets/npc_top.png'),
         ]
         self.populate_menu_options(self.ui_objects)
 
-    def display(self, game_instance, table):
+    def display(self, game_instance):
         # Window Running Loop for the instance.
         while True:
 
@@ -87,8 +66,6 @@ class TableWindow(InteractiveWindow):
                         game_instance.draw_objects()
                         return
                 if event.type == pygame.MOUSEBUTTONUP:
-                    for index, selection in enumerate(self.menu_options):
-                        if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
-                            ShoulderWindow(table.npcs[index-1]).display(game_instance)
+                    pass
 
             pygame.display.update()

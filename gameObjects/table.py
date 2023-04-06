@@ -9,7 +9,7 @@ green = (0, 255, 0)
 
 class Table(GameObject):
 
-    def __init__(self, x, y, w, h, img, name, name_list):
+    def __init__(self, x, y, w, h, img, name, data):
         super().__init__(x, y, w, h, img, name)
         self.textRect = None
         self.text = None
@@ -17,45 +17,59 @@ class Table(GameObject):
         self.infected = False
         self.interactable = True
         self.render()
-        self.top_seat = (
-            # X
-            self.x + 52,
-            # y
-            self.y - 32
+        self.top_seat = (self.x + 52, self.y - 32)
+        self.right_seat = ((self.x + self.w), (self.y + 46))
+        self.left_seat = ((self.x - 64), (self.y + 46))
+        self.bottom_seat = ( self.x + 46, (self.y + self.h - 60))
+
+        self.npc_top = NPC(
+            x=self.top_seat[0],
+            y=self.top_seat[1],
+            w=55,
+            h=55,
+            img='assets/npc_top.png',
         )
-        self.right_seat = (
-            # X
-            (self.x + self.w),
-            # Y
-            (self.y + 46)
+        self.npc_right = NPC(
+           x=self.right_seat[0],
+           y=self.right_seat[1],
+           w=60,
+           h=100,
+           img='assets/npc_right.png',
         )
-        self.left_seat = (
-            # X
-            (self.x - 64),
-            # Y
-            (self.y + 46)
+        self.npc_left = NPC(
+            x=self.left_seat[0],
+            y=self.left_seat[1],
+            w=60,
+            h=100,
+            img='assets/npc_left.png',
         )
-        self.bottom_seat = (
-            # X
-            self.x + 46,
-            # y
-            (self.y + self.h - 60)
+        self.npc_bottom = NPC(
+            x=self.bottom_seat[0],
+            y=self.bottom_seat[1],
+            w=60,
+            h=100,
+            img='assets/npc_bottom.png',
         )
 
-        self.name_01 = name_list[len(name_list) - 1]
-        name_list.pop()
-        self.name_02 = name_list[len(name_list) - 1]
-        name_list.pop()
-        self.name_03 = name_list[len(name_list) - 1]
-        name_list.pop()
-        self.name_04 = name_list[len(name_list) - 1]
-        name_list.pop()
-        self.npc_top = NPC(self.top_seat[0], self.top_seat[1], 55, 55, 'assets/npc_top.png', self.name_01)
-        self.npc_right = NPC(self.right_seat[0], self.right_seat[1], 60, 100, 'assets/npc_right.png', self.name_02)
-        self.npc_left = NPC(self.left_seat[0], self.left_seat[1], 60, 100, 'assets/npc_left.png', self.name_03)
-        self.npc_bottom = NPC(self.bottom_seat[0], self.bottom_seat[1], 60, 100, 'assets/npc_bottom.png', self.name_04)
+        self.npcs = [self.npc_top, self.npc_right, self.npc_bottom, self.npc_left]
+        self.populate_npc_data(data)
 
-        self.npcs = [self.npc_top, self.npc_right, self.npc_left, self.npc_bottom]
+    def populate_npc_data(self, npc_data):
+        # Populate Names
+        for npc in self.npcs:
+            npc.name = npc_data['names'][len(npc_data['names']) - 1]
+            npc_data['names'].pop()
+
+        # Populate IP
+        for npc in self.npcs:
+            npc.ip = npc_data['ips'][len(npc_data['ips']) - 1]
+            npc_data['ips'].pop()
+
+        # Populate MAC
+        for npc in self.npcs:
+            npc.mac = npc_data['macs'][len(npc_data['macs']) - 1]
+            npc_data['macs'].pop()
+
 
     def render(self):
         self.font = pygame.font.Font('freesansbold.ttf', 16)
@@ -69,4 +83,3 @@ class Table(GameObject):
         infected_seat = random.randint(0, 3)
         npc_list[infected_seat].infected = True
         npc_list[infected_seat].infected_seat = infected_seat
-

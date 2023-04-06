@@ -3,8 +3,8 @@ import pygame
 import sys
 from pygame.locals import QUIT
 
-# Import Data
-from data.names import names
+# Import NPC Data
+from data.npc_data import npc_data
 
 # Import Game Objects
 from gameObjects.gameObject import GameObject
@@ -28,7 +28,7 @@ white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
-random.shuffle(names)
+random.shuffle(npc_data['names'])
 
 
 class GameInstance:
@@ -51,7 +51,7 @@ class GameInstance:
         # Initialize the interaction_running state. (Off by Default)
         self.interaction_running = False
         # Initialize data
-        self.name_list = names
+        self.npc_data = npc_data
         # Establish Game Objects
         # Initialize the background image
         self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT, 'assets/carpet.png')
@@ -65,12 +65,12 @@ class GameInstance:
         self.menu = ToolBar(0, 0, self.WIDTH, 32, 'assets/gamebar.png')
 
         # Initialize all table objects.
-        self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0', self.name_list)
-        self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1', self.name_list)
-        self.table2 = Table(900, 670, 160, 160, 'assets/table_blue.png', '2', self.name_list)
-        self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3', self.name_list)
-        self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4', self.name_list)
-        self.table5 = Table(900, 250, 160, 160, 'assets/table_red.png', '5', self.name_list)
+        self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0', self.npc_data)
+        self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1', self.npc_data)
+        self.table2 = Table(900, 670, 160, 160, 'assets/table_blue.png', '2', self.npc_data)
+        self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3', self.npc_data)
+        self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4', self.npc_data)
+        self.table5 = Table(900, 250, 160, 160, 'assets/table_red.png', '5', self.npc_data)
         # Initialize and populate table list
         self.tables = [
             self.table0,
@@ -85,7 +85,7 @@ class GameInstance:
         self.set_hacker(self.tables)
 
         # Initialize the Server Object
-        self.server = Server(900, 480, 120, 120, 'assets/red.png')
+        self.server = Server(1080, 480, 120, 120, 'assets/red.png')
 
         # Initialize and populate the objects list of lists.
         self.objects = [
@@ -146,7 +146,7 @@ class GameInstance:
                     elif event.key == pygame.K_e and self.player.can_interact:
                         # Check type of object selected
                         if self.player.adjacent_object.__class__.__name__ == 'Table':
-                            TableWindow(self.player.adjacent_object).display(self)
+                            TableWindow(self.player.adjacent_object).display(self, self.player.adjacent_object)
 
                 # Event Listener for released keys.
                 if event.type == pygame.KEYUP:
