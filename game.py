@@ -3,6 +3,9 @@ import pygame
 import sys
 from pygame.locals import QUIT
 
+# Import Data
+from data.names import names
+
 # Import Game Objects
 from gameObjects.gameObject import GameObject
 from gameObjects.player import Player
@@ -25,6 +28,8 @@ white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
+random.shuffle(names)
+
 
 class GameInstance:
     def __init__(self):
@@ -45,7 +50,8 @@ class GameInstance:
         self.dialog_running = False
         # Initialize the interaction_running state. (Off by Default)
         self.interaction_running = False
-
+        # Initialize data
+        self.name_list = names
         # Establish Game Objects
         # Initialize the background image
         self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT, 'assets/carpet.png')
@@ -59,13 +65,12 @@ class GameInstance:
         self.menu = ToolBar(0, 0, self.WIDTH, 32, 'assets/gamebar.png')
 
         # Initialize all table objects.
-        self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0')
-        self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1')
-        self.table2 = Table(900, 670, 160, 160, 'assets/table_blue.png', '2')
-        self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3')
-        self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4')
-        self.table5 = Table(900, 250, 160, 160, 'assets/table_red.png', '5')
-
+        self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0', self.name_list)
+        self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1', self.name_list)
+        self.table2 = Table(900, 670, 160, 160, 'assets/table_blue.png', '2', self.name_list)
+        self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3', self.name_list)
+        self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4', self.name_list)
+        self.table5 = Table(900, 250, 160, 160, 'assets/table_red.png', '5', self.name_list)
         # Initialize and populate table list
         self.tables = [
             self.table0,
@@ -141,7 +146,7 @@ class GameInstance:
                     elif event.key == pygame.K_e and self.player.can_interact:
                         # Check type of object selected
                         if self.player.adjacent_object.__class__.__name__ == 'Table':
-                            TableWindow().display(self)
+                            TableWindow(self.player.adjacent_object).display(self)
 
                 # Event Listener for released keys.
                 if event.type == pygame.KEYUP:

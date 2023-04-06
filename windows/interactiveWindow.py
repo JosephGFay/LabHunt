@@ -22,31 +22,33 @@ class InteractiveWindow(GameObject):
     img : str
       String path to image file.
     """
-    x = 300
-    y = 150
-    w = 600
-    h = 600
-
-    col_0 = None
-    col_1 = None
-    col_2 = None
-    col_3 = None
-
-    row_0 = None
-    row_1 = None
-
-    img = pygame.image.load('assets/dialog_window.png')
-    img = pygame.transform.scale(img, (w, h))
-    img_sel = pygame.image.load('assets/cyan.png')
-    selection = None
-    menu_options = []
 
     def __init__(self) -> None:
         """
-        Constructor method for the Interactive Window
-        @rtype: None
+            Constructor method for the Interactive Window
+            @rtype: None
         """
+
         # Attributes
+        self.x = 300
+        self.y = 150
+        self.w = 600
+        self.h = 600
+
+        self.col_0 = None
+        self.col_1 = None
+        self.col_2 = None
+        self.col_3 = None
+
+        self.row_0 = None
+        self.row_1 = None
+
+        self.img = pygame.image.load('assets/dialog_window.png')
+        self.img = pygame.transform.scale(self.img, (self.w, self.h))
+        self.img_sel = pygame.image.load('assets/cyan.png')
+        self.selection = None
+        self.menu_options = []
+
         self.img.convert_alpha()
         self.img_sel.convert_alpha()
         # Call to GameObject Constructor using default class attributes
@@ -93,4 +95,5 @@ class InteractiveWindow(GameObject):
                     if event.key == pygame.K_ESCAPE:
                         game_instance.draw_objects()
                         return
+
             pygame.display.update()

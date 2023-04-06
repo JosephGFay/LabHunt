@@ -11,11 +11,12 @@ SPRITES = [
 
 class NPC(GameObject):
 
-    def __init__(self, x, y, w, h, img):
+    def __init__(self, x, y, w, h, img, name):
         super().__init__(x, y, w, h, img)
         self.infected = False
         self.infected_seat = None
         self.check_infected()
+        self.name = name
 
     def check_infected(self):
         # Check to see if an NPC is infected.

@@ -2,20 +2,24 @@ from gameObjects.gameObject import GameObject
 from gameObjects.npc import NPC
 import pygame
 import random
+from windows.tableWindow import TableWindow
 
 green = (0, 255, 0)
 
 
 class Table(GameObject):
 
-    def __init__(self, x, y, w, h, img, name):
+    def __init__(self, x, y, w, h, img, name, name_list):
         super().__init__(x, y, w, h, img, name)
+        self.textRect = None
+        self.text = None
+        self.font = None
         self.infected = False
         self.interactable = True
         self.render()
         self.top_seat = (
             # X
-            (self.x) + 52,
+            self.x + 52,
             # y
             self.y - 32
         )
@@ -23,25 +27,33 @@ class Table(GameObject):
             # X
             (self.x + self.w),
             # Y
-            ((self.y) + 46)
+            (self.y + 46)
         )
         self.left_seat = (
             # X
             (self.x - 64),
             # Y
-            ((self.y) + 46)
+            (self.y + 46)
         )
         self.bottom_seat = (
             # X
-            (self.x) + 46,
+            self.x + 46,
             # y
             (self.y + self.h - 60)
         )
 
-        self.npc_top = NPC(self.top_seat[0], self.top_seat[1], 55, 55, 'assets/npc_top.png')
-        self.npc_right = NPC(self.right_seat[0], self.right_seat[1], 60, 100, 'assets/npc_right.png')
-        self.npc_left = NPC(self.left_seat[0], self.left_seat[1], 60, 100, 'assets/npc_left.png')
-        self.npc_bottom = NPC(self.bottom_seat[0], self.bottom_seat[1], 60, 100, 'assets/npc_bottom.png')
+        self.name_01 = name_list[len(name_list) - 1]
+        name_list.pop()
+        self.name_02 = name_list[len(name_list) - 1]
+        name_list.pop()
+        self.name_03 = name_list[len(name_list) - 1]
+        name_list.pop()
+        self.name_04 = name_list[len(name_list) - 1]
+        name_list.pop()
+        self.npc_top = NPC(self.top_seat[0], self.top_seat[1], 55, 55, 'assets/npc_top.png', self.name_01)
+        self.npc_right = NPC(self.right_seat[0], self.right_seat[1], 60, 100, 'assets/npc_right.png', self.name_02)
+        self.npc_left = NPC(self.left_seat[0], self.left_seat[1], 60, 100, 'assets/npc_left.png', self.name_03)
+        self.npc_bottom = NPC(self.bottom_seat[0], self.bottom_seat[1], 60, 100, 'assets/npc_bottom.png', self.name_04)
 
         self.npcs = [self.npc_top, self.npc_right, self.npc_left, self.npc_bottom]
 
@@ -57,3 +69,4 @@ class Table(GameObject):
         infected_seat = random.randint(0, 3)
         npc_list[infected_seat].infected = True
         npc_list[infected_seat].infected_seat = infected_seat
+
