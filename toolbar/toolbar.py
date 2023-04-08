@@ -11,5 +11,5 @@ class ToolBar(GameObject):
     def __init__(self, x, y, w, h, img):
         super().__init__(x, y, w, h, img)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
-        self.text = self.font.render('Tools', True, white, blue)
+        self.text = self.font.render('Help', True, white, blue)
         self.textRect = self.text.get_rect()

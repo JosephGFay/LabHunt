@@ -4,8 +4,8 @@ import pygame
 SPRITES = [
     'assets/hacker_top.png',
     'assets/hacker_right.png',
-    'assets/hacker_left.png',
     'assets/hacker_bottom.png',
+    'assets/hacker_left.png',
 ]
 
 

@@ -2,7 +2,6 @@ from gameObjects.gameObject import GameObject
 from gameObjects.npc import NPC
 import pygame
 import random
-from windows.tableWindow import TableWindow
 
 green = (0, 255, 0)
 

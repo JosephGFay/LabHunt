@@ -1,33 +1,102 @@
 from windows.interactiveWindow import InteractiveWindow
 from windows.ui_Object import UIObject
-from windows.ui_InteractableObject import UIInteractableObject
 from dialog.textObject import TextObject
 import pygame
 import sys
 from pygame.locals import QUIT
 import Joetilities.utilities
+from data.npc_activites import activities, articles
+import random
 
 
 class ShoulderWindow(InteractiveWindow):
 
-    def __init__(self, student) -> None:
+    def __init__(self, student, detected) -> None:
         super().__init__()
+        self.x = 100
+        self.w = 1000
+        self.h = 600
+        self.img = pygame.image.load('assets/dialog_window.png')
+        self.img = pygame.transform.scale(self.img, (self.w, self.h))
+        self.detected = detected
+
         self.col_0 = self.x + 45
         self.col_1 = self.x + 45 * 4
         self.col_2 = self.x + 45 * 7
         self.col_3 = self.x + 45 * 10
 
         self.row_0 = self.y + 80
-        self.row_1 = self.y + 40 * 5
-        self.row_2 = self.row_1 + 40 * 4
+        self.row_1 = self.y + 40 * 6
+        self.row_2 = self.row_1 + 40
         self.row_3 = self.row_2 + 40
         self.row_4 = self.row_3 + 40
 
-        self.ui_objects = [
+        # Random number for student screen text options
+        self.ran_student_screen = random.randint(0, len(activities['student']['screens']) - 1)
+        # Random number for articles
+        self.chance_for_art = random.randint(0, 3)
+        self.ran_art = random.randint(0, len(articles))
+
+        # Random number for activities
+        self.ran_act = random.randint(0, len(activities['student']['activity']) - 1)
+
+        # Random number for suspicious student text
+        self.ran_student_suspicious = random.randint(0, len(activities['student']['suspicious']) - 1)
+
+        self.ui_elements = [
+            # Title
             TextObject(None, f'{student.name}', self.col_0 + 150, self.row_0, 36),
-            UIInteractableObject(self.x + 40, self.row_0, 100, 120, 'assets/npc_top.png'),
+            # Profile
+            UIObject(self.x + 40, self.row_0, 100, 120, 'assets/npc_top.png'),
+            # Event Picture
+            UIObject(self.x + self.w - 390, self.row_0, 350, 480, 'assets/shoulder_view.png'),
         ]
-        self.populate_menu_options(self.ui_objects)
+
+        # Default text to display
+        self.ui_text = [
+            # Event Text
+            TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0, self.row_1,
+                       12),
+            # Activity 01
+            TextObject(None, f"On their screen you can see {activities['student']['screens'][self.ran_student_screen]}",
+                       self.col_0,
+                       self.row_2, 12),
+        ]
+
+        # Display text for viewing an article
+        if self.chance_for_art == 1:
+            self.ui_text = [
+                # Event Text
+                TextObject(None, f'{student.name} is browsing cyber security articles', self.col_0, self.row_1, 12),
+                # Activity 01
+                TextObject(None, f"They have found an article called \"{articles[self.ran_art]}\"",
+                           self.col_0,
+                           self.row_2, 12),
+                # Activity 02
+
+            ]
+
+        # Display text for the hacker.
+        if student.infected:
+            self.ui_text = [
+                TextObject(None, f'{student.name} is a hacker', self.col_0, self.row_1, 12),
+
+                TextObject(None, f'On their screen you can see blackboard inside a google chrome browser', self.col_0, self.row_2, 12),
+
+            ]
+
+        # # Display text if detected
+        # if self.detected:
+        #     self.ui_text = [
+        #         TextObject(None, f'{student.name} has detected you', self.col_0, self.row_1, 12),
+        #
+        #         TextObject(None, f"On their screen you can see {activities['student']['screens'][ran_student_screen]}",
+        #                    self.col_0,
+        #                    self.row_2, 12),
+        #
+        #     ]
+
+        self.populate_menu_options(self.ui_elements + self.ui_text)
 
     def display(self, game_instance):
         # Window Running Loop for the instance.
