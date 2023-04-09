@@ -74,6 +74,8 @@ class TableWindow(InteractiveWindow):
                     # Check if menu option is interactable
                     if selection.interactable:
                         self.selection = index
+                    else:
+                        self.selection = None
 
             # Event Listener
             for event in pygame.event.get():
@@ -91,6 +93,6 @@ class TableWindow(InteractiveWindow):
                         if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
 
                             detected = random.randint(0, 1)
-                            ShoulderWindow(table.npcs[index-1], detected).display(game_instance)
+                            ShoulderWindow(table.npcs[index-1], detected).display(game_instance, table.npcs[index-1])
 
             pygame.display.update()

@@ -1,6 +1,8 @@
 from windows.interactiveWindow import InteractiveWindow
 from windows.ui_Object import UIObject
+from windows.ui_InteractableObject import UIInteractableObject
 from dialog.textObject import TextObject
+
 import pygame
 import sys
 from pygame.locals import QUIT
@@ -36,11 +38,10 @@ class ShoulderWindow(InteractiveWindow):
         # Random number for articles
         self.chance_for_art = random.randint(0, 3)
         self.ran_art = random.randint(0, len(articles))
-
         # Random number for activities
         self.ran_act = random.randint(0, len(activities['student']['activity']) - 1)
-
         # Random number for suspicious student text
+        self.chance_for_sus = random.randint(0, 9)
         self.ran_student_suspicious = random.randint(0, len(activities['student']['suspicious']) - 1)
 
         self.ui_elements = [
@@ -50,6 +51,8 @@ class ShoulderWindow(InteractiveWindow):
             UIObject(self.x + 40, self.row_0, 100, 120, 'assets/npc_top.png'),
             # Event Picture
             UIObject(self.x + self.w - 390, self.row_0, 350, 480, 'assets/shoulder_view.png'),
+
+            UIInteractableObject(self.x + 190, self.row_0 + 60, 200, 50, 'assets/expose_hacker.png', object_id='accuse_button')
         ]
 
         # Default text to display
@@ -58,9 +61,8 @@ class ShoulderWindow(InteractiveWindow):
             TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0, self.row_1,
                        12),
             # Activity 01
-            TextObject(None, f"On their screen you can see {activities['student']['screens'][self.ran_student_screen]}",
-                       self.col_0,
-                       self.row_2, 12),
+            TextObject(None, f"On their screen you can see {activities['student']['screens'][self.ran_student_screen]}", self.col_0, self.row_2, 12),
+
         ]
 
         # Display text for viewing an article
@@ -69,20 +71,17 @@ class ShoulderWindow(InteractiveWindow):
                 # Event Text
                 TextObject(None, f'{student.name} is browsing cyber security articles', self.col_0, self.row_1, 12),
                 # Activity 01
-                TextObject(None, f"They have found an article called \"{articles[self.ran_art]}\"",
-                           self.col_0,
-                           self.row_2, 12),
+                TextObject(None, f"They are reading \"{articles[self.ran_art]}\"", self.col_0, self.row_2, 12),
                 # Activity 02
 
             ]
 
-        # Display text for the hacker.
-        if student.infected:
+        # Display text for the hacker or display text for a suspicious user.
+        if student.infected or self.chance_for_sus == 1:
             self.ui_text = [
-                TextObject(None, f'{student.name} is a hacker', self.col_0, self.row_1, 12),
+                TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0, self.row_1, 12),
 
-                TextObject(None, f'On their screen you can see blackboard inside a google chrome browser', self.col_0, self.row_2, 12),
-
+                TextObject(None, f"On their screen you can see {activities['hacker']['suspicious'][self.ran_student_suspicious]}", self.col_0, self.row_2, 12),
             ]
 
         # # Display text if detected
@@ -98,10 +97,9 @@ class ShoulderWindow(InteractiveWindow):
 
         self.populate_menu_options(self.ui_elements + self.ui_text)
 
-    def display(self, game_instance):
+    def display(self, game_instance, student):
         # Window Running Loop for the instance.
         while True:
-
             # Display the background dialog window
             game_instance.game_window.blit(self.img, (self.x, self.y))
 
@@ -122,6 +120,8 @@ class ShoulderWindow(InteractiveWindow):
                     # Check if menu option is interactable
                     if selection.interactable:
                         self.selection = index
+                    else:
+                        self.selection = None
 
             # Event Listener
             for event in pygame.event.get():
@@ -135,6 +135,12 @@ class ShoulderWindow(InteractiveWindow):
                         game_instance.draw_objects()
                         return
                 if event.type == pygame.MOUSEBUTTONUP:
-                    pass
+                    for index, selection in enumerate(self.menu_options):
+                        if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
+                            if selection.object_id == 'accuse_button':
+                                if student.infected:
+                                    print('You win')
+                                else:
+                                    print('You lose')
 
             pygame.display.update()
