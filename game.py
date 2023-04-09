@@ -16,23 +16,60 @@ from gameObjects.server import Server
 from toolbar.toolbar import ToolBar
 
 # Import Dialog Window and related items
-from dialog.interactionDialog import InteractionDialog
 from dialog.splashDialog import SplashDialog
-import random
 
 # Import Interactive Windows
 from windows.tableWindow import TableWindow
+
+# Misc imports
+import random
 
 # Global Variables for color usage
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
+# Shuffle the npc data to randomize name assignments.
 random.shuffle(npc_data['names'])
 
 
 class GameInstance:
-    def __init__(self):
+    """
+    Game instance class created to house the main functionality of the game.
+
+    Attributes
+    -----------
+    WIDTH : int
+        Variable for the window width.
+    HEIGHT : int
+        Variable for the window height.
+    game_window : Surface
+        The main game window.
+    clock : Clock
+        mirrors the pygame clock.
+    tick_rate : int
+        Handles the FPS for the clock.
+    dialog_running : bool
+        Checks if there is an active dialog window running
+    interaction_running : bool
+        Checks if there is n active interaction running.
+    npc_data : dict
+        Holds the data for the npcs
+    background : GameObject
+        Sets the background to a gameObject class that is same size as window.
+    player : Player
+        Stores the player data and methods
+    player_direction_x : int.
+        Sets direction on the horizontal axis
+    player_direction y: int
+        sets direction on the vertical axis.
+
+    """
+    def __init__(self) -> None:
+        """
+        Constructs the game instance object.
+
+        """
         # Initial PyGame Window Setup
         pygame.init()
         # Initialize Window Dimensions
