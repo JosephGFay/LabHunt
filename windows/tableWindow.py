@@ -9,6 +9,7 @@ from pygame.locals import QUIT
 import Joetilities.utilities
 import random
 
+
 class TableWindow(InteractiveWindow):
 
     def __init__(self, table) -> None:
@@ -91,8 +92,8 @@ class TableWindow(InteractiveWindow):
                 if event.type == pygame.MOUSEBUTTONUP:
                     for index, selection in enumerate(self.menu_options):
                         if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
-
                             detected = random.randint(0, 1)
-                            ShoulderWindow(table.npcs[index-1], detected).display(game_instance, table.npcs[index-1])
+                            ShoulderWindow(table.npcs[index - 1], detected).display(game_instance,
+                                                                                    table.npcs[index - 1])
 
             pygame.display.update()

@@ -17,6 +17,7 @@ from toolbar.toolbar import ToolBar
 
 # Import Dialog Window and related items
 from dialog.splashDialog import SplashDialog
+from windows.serverWindow import ServerWindow
 
 # Import Interactive Windows
 from windows.tableWindow import TableWindow
@@ -63,7 +64,21 @@ class GameInstance:
         Sets direction on the horizontal axis
     player_direction y: int
         sets direction on the vertical axis.
+    table0-table5: Table
+        Initialize tables within the game instance.
+    tables: list[Table]
+        A collection of the game tables.
+    server: GameObject
+        The games Network Server object.
+    objects: list[[objects]]
+        Nested list of objects used for rendering.
 
+    Methods
+    ----------
+    # TODO Add more documentation for GameInstance methods
+    game_loop
+    draw_objects
+    set_hacker
     """
     def __init__(self) -> None:
         """
@@ -104,10 +119,10 @@ class GameInstance:
         # Initialize all table objects.
         self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0', self.npc_data)
         self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1', self.npc_data)
-        self.table2 = Table(900, 670, 160, 160, 'assets/table_blue.png', '2', self.npc_data)
+        self.table2 = Table(850, 670, 160, 160, 'assets/table_blue.png', '2', self.npc_data)
         self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3', self.npc_data)
         self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4', self.npc_data)
-        self.table5 = Table(900, 250, 160, 160, 'assets/table_red.png', '5', self.npc_data)
+        self.table5 = Table(850, 250, 160, 160, 'assets/table_red.png', '5', self.npc_data)
         # Initialize and populate table list
         self.tables = [
             self.table0,
@@ -122,7 +137,7 @@ class GameInstance:
         self.set_hacker(self.tables)
 
         # Initialize the Server Object
-        self.server = Server(1080, 480, 120, 120, 'assets/red.png')
+        self.server = Server(1000, 480, 120, 160, 'assets/server.png')
 
         # Initialize and populate the objects list of lists.
         self.objects = [
@@ -130,7 +145,12 @@ class GameInstance:
             [self.server],
         ]
 
-    def game_loop(self):
+    def game_loop(self) -> None:
+        """
+        GameInstance method that handles running the main game loop.
+
+        @return: None
+        """
         # Initial draw of game objects
         self.draw_objects()
         # Display the splash screen to the player.
@@ -183,7 +203,11 @@ class GameInstance:
                     elif event.key == pygame.K_e and self.player.can_interact:
                         # Check type of object selected
                         if self.player.adjacent_object.__class__.__name__ == 'Table':
+                            # Render the Table Window is table is selected.
                             TableWindow(self.player.adjacent_object).display(self, self.player.adjacent_object)
+                        if self.player.adjacent_object.__class__.__name__ == 'Server':
+                            # Render the Table Window is table is selected.
+                            ServerWindow(self)
 
                 # Event Listener for released keys.
                 if event.type == pygame.KEYUP:
@@ -208,8 +232,12 @@ class GameInstance:
 
             self.clock.tick(self.tick_rate)
 
-    def draw_objects(self):
-        # Function the draw all objects on the screen.
+    def draw_objects(self) -> None:
+        """
+        Function to draw all objects on the screen.
+
+        @return: None
+        """
 
         # Draw Carpet
         self.game_window.blit(self.background.img,
@@ -242,8 +270,14 @@ class GameInstance:
         pygame.display.update()
 
     @staticmethod
-    def set_hacker(table_list):
-        # Function to establish a hacker within a table list.
+    def set_hacker(table_list: list[Table]) -> None:
+        """
+        Populates the game tables with a randomized hacker.
+
+        @param table_list: list[Table]
+        @return: None
+        """
+
         # Choose a table at random
         infected_table = random.randint(0, 5)
         # Set the table as infected
