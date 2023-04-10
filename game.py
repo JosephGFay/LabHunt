@@ -2,7 +2,7 @@
 import pygame
 import sys
 from pygame.locals import QUIT
-
+import os
 # Import NPC Data
 from data.npc_data import npc_data
 
@@ -80,6 +80,7 @@ class GameInstance:
     draw_objects
     set_hacker
     """
+
     def __init__(self) -> None:
         """
         Constructs the game instance object.
@@ -104,10 +105,15 @@ class GameInstance:
         self.interaction_running = False
         # Initialize data
         self.npc_data = npc_data
+        self.animation_tick = 0
+        self.animation_frame = 0
         # Establish Game Objects
         # Initialize the background image
         self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT, 'assets/carpet.png')
 
+        # Initialize TVs
+        self.tv_left = GameObject(41, 48, 241, 128, 'assets/red.png')
+        self.tv_right = GameObject(self.WIDTH - 241-41, 48, 242, 128, 'assets/red.png')
         # Initialize Player                           
         self.player = Player(400, 400, 50, 64, 'assets/admin_top.png')
         self.player_direction_y = 0
@@ -152,12 +158,14 @@ class GameInstance:
         @return: None
         """
         # Initial draw of game objects
+
         self.draw_objects()
         # Display the splash screen to the player.
         SplashDialog(self, 'Welcome to lab Hunt!')
-
         while True:
             # Update the screen.
+            # if animation_frame > 60:
+            #     animation_frame = 40
             self.draw_objects()
             # Listen for events
             for event in pygame.event.get():
@@ -230,6 +238,10 @@ class GameInstance:
             self.player.move_x(self.player_direction_x, self.WIDTH, self.objects)
             self.player.move_y(self.player_direction_y, self.HEIGHT, self.objects)
 
+            self.animation_tick += 1
+            if self.animation_tick > 10:
+                self.animation_tick = 0
+                self.animation_frame += 1
             self.clock.tick(self.tick_rate)
 
     def draw_objects(self) -> None:
@@ -240,8 +252,24 @@ class GameInstance:
         """
 
         # Draw Carpet
-        self.game_window.blit(self.background.img,
-                              (self.background.x, self.background.y))
+        self.game_window.blit(self.background.img, (self.background.x, self.background.y))
+
+        # Draw and animate tvs
+        folder_path = 'assets/tv_left'
+        folder_contents = os.listdir(folder_path)
+        if self.animation_frame > len(folder_contents)-1:
+            self.animation_frame = 0
+
+        self.tv_left.img = pygame.image.load(folder_path + '/' + folder_contents[self.animation_frame])
+
+        self.tv_left.img = pygame.transform.scale(self.tv_left.img, (self.tv_left.w, self.tv_left.h))
+
+        self.tv_right.img = pygame.image.load(folder_path + '/' + folder_contents[self.animation_frame])
+
+        self.tv_right.img = pygame.transform.scale(self.tv_right.img, (self.tv_right.w, self.tv_right.h))
+
+        self.game_window.blit(self.tv_left.img, (self.tv_left.x, self.tv_left.y))
+        self.game_window.blit(self.tv_right.img, (self.tv_right.x, self.tv_right.y))
 
         # Draw Menu Bar
         self.game_window.blit(self.menu.img, (self.menu.x, self.menu.y))

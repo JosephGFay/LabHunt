@@ -51,3 +51,4 @@ class GameObject:
         self.h = h
         self.interactable = False
         self.selected = False
+        self.object_id = None

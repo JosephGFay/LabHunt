@@ -71,7 +71,7 @@ class ShoulderWindow(InteractiveWindow):
                 # Event Text
                 TextObject(None, f'{student.name} is browsing cyber security articles', self.col_0, self.row_1, 12),
                 # Activity 01
-                TextObject(None, f"They are reading \"{articles[self.ran_art]}\"", self.col_0, self.row_2, 12),
+                TextObject(None, f"They are reading \"{articles[self.ran_art-1]}\"", self.col_0, self.row_2, 12),
                 # Activity 02
 
             ]

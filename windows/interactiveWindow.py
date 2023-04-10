@@ -55,6 +55,5 @@ class InteractiveWindow(GameObject):
         super().__init__(self.x, self.y, self.w, self.h)
 
     def populate_menu_options(self, option_list: list) -> None:
-        for option in option_list:
-            self.menu_options.append(option)
 
+        self.menu_options = option_list

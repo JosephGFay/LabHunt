@@ -16,5 +16,6 @@ class TextObject:
         self.w = self.textRect.w
         self.h = self.textRect.h
         self.interactable = False
+        self.object_id = None
         if game_instance:
             game_instance.game_window.blit(self.text, self.textRect)
