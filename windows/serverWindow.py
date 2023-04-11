@@ -1,5 +1,6 @@
 import random
 
+from windows.ui_InteractableObject import UIInteractableObject
 from dialog.textObject import TextObject
 from windows.interactiveWindow import InteractiveWindow
 import pygame
@@ -8,6 +9,7 @@ from pygame.locals import QUIT
 import Joetilities.utilities
 import asyncio
 from data.server_data import ip_addresses
+
 
 class ServerWindow(InteractiveWindow):
     """
@@ -59,9 +61,12 @@ class ServerWindow(InteractiveWindow):
             TextObject(None, f'Source', self.col_0, self.y + 80, 12),
             TextObject(None, f'Destination', self.col_1, self.y + 80, 12),
             TextObject(None, f'URL', self.col_2, self.y + 80, 12),
+            UIInteractableObject(self.x + self.w - 160, self.y + 120, 80, 80, 'assets/red.png'),
+            UIInteractableObject(self.x + self.w - 160, self.y + self.h - 180, 80, 80, 'assets/red.png'),
+
         ]
         self.log_text = [
-            TextObject(None, f'Starting Terminal Session...', self.col_0, self.row_0, 24),
+            TextObject(None, f'', self.col_0, self.row_0, 24),
         ]
 
         # Run both window loops.
@@ -123,7 +128,7 @@ class ServerWindow(InteractiveWindow):
                     pass
 
             pygame.display.update()
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.001)
 
     async def start_traffic(self, game_instance) -> None:
         """
@@ -138,7 +143,7 @@ class ServerWindow(InteractiveWindow):
             for text in self.log_text:
                 text.y -= h
             await asyncio.sleep(0.3)
-            random_table = random.randint(0, len(game_instance.tables)-1)
+            random_table = random.randint(0, len(game_instance.tables) - 1)
             random_npc = random.randint(0, 3)
             random_source_ip = game_instance.tables[random_table].npcs[random_npc].ip
             random_website, random_destination_ip = random.choice(list(ip_addresses.items()))

@@ -33,7 +33,7 @@ websites = {
     "SecurityWeek": "securityweek.com",
     "CSO Online": "csoonline.com",
     "SC Magazine": "scmagazine.com",
-    "Help Net Security": "helpnetsecurity.com",
+    "Help Net Security":     "helpnetsecurity.com",
     "Cyber Defense Magazine": "cyberdefensemagazine.com",
     "CISO MAG": "cisomag.com",
     "Securelist": "securelist.com",

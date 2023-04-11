@@ -52,16 +52,19 @@ class ShoulderWindow(InteractiveWindow):
             # Event Picture
             UIObject(self.x + self.w - 390, self.row_0, 350, 480, 'assets/shoulder_view.png'),
 
-            UIInteractableObject(self.x + 190, self.row_0 + 60, 200, 50, 'assets/expose_hacker.png', object_id='accuse_button')
+            UIInteractableObject(self.x + 190, self.row_0 + 60, 200, 50, 'assets/expose_hacker.png',
+                                 object_id='accuse_button')
         ]
 
         # Default text to display
         self.ui_text = [
             # Event Text
-            TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0, self.row_1,
+            TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0,
+                       self.row_1,
                        12),
             # Activity 01
-            TextObject(None, f"On their screen you can see {activities['student']['screens'][self.ran_student_screen]}", self.col_0, self.row_2, 12),
+            TextObject(None, f"On their screen you can see {activities['student']['screens'][self.ran_student_screen]}",
+                       self.col_0, self.row_2, 12),
 
         ]
 
@@ -71,7 +74,7 @@ class ShoulderWindow(InteractiveWindow):
                 # Event Text
                 TextObject(None, f'{student.name} is browsing cyber security articles', self.col_0, self.row_1, 12),
                 # Activity 01
-                TextObject(None, f"They are reading \"{articles[self.ran_art-1]}\"", self.col_0, self.row_2, 12),
+                TextObject(None, f"They are reading \"{articles[self.ran_art - 1]}\"", self.col_0, self.row_2, 12),
                 # Activity 02
 
             ]
@@ -79,21 +82,13 @@ class ShoulderWindow(InteractiveWindow):
         # Display text for the hacker or display text for a suspicious user.
         if student.infected or self.chance_for_sus == 1:
             self.ui_text = [
-                TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0, self.row_1, 12),
+                TextObject(None, f"{student.name} is {activities['student']['activity'][self.ran_act]}", self.col_0,
+                           self.row_1, 12),
 
-                TextObject(None, f"On their screen you can see {activities['hacker']['suspicious'][self.ran_student_suspicious]}", self.col_0, self.row_2, 12),
+                TextObject(None,
+                           f"On their screen you can see {activities['hacker']['suspicious'][self.ran_student_suspicious]}",
+                           self.col_0, self.row_2, 12),
             ]
-
-        # # Display text if detected
-        # if self.detected:
-        #     self.ui_text = [
-        #         TextObject(None, f'{student.name} has detected you', self.col_0, self.row_1, 12),
-        #
-        #         TextObject(None, f"On their screen you can see {activities['student']['screens'][ran_student_screen]}",
-        #                    self.col_0,
-        #                    self.row_2, 12),
-        #
-        #     ]
 
         self.populate_menu_options(self.ui_elements + self.ui_text)
 

@@ -10,8 +10,44 @@ SPRITES = [
 
 
 class NPC(GameObject):
+    """
+        Class object for the game's NPC objects.
 
-    def __init__(self, x, y, w, h, img):
+        Parameters:
+
+            x : int
+                stores the objects x coordinate.
+            y : int
+                stores the objects y coordinate.
+            w : int
+                stores the objects width
+            h : int
+                stores the objects height
+            img :str
+                string value for the img path to be used for the object's image.
+
+        Attributes:
+            infected : bool
+                determines if the npc is a hacker or not.
+            infected_seat : bool
+                determines of the seat that the NPC occupies is a hacker seat.
+            name : None
+                value to store the NPC's name, populated later by npc_data file.
+            ip : None
+                value to store the NPC's ip, populated later by npc_data file.
+            mac : None
+                value to store the NPC's mac, populated later by npc_data file.
+
+        Methods:
+            check_infected -> None
+                Checks if current NPC is a hacker and then displays their image.
+
+            set_hacker_visible -> None
+                loads hacker images and sets them for current NPC.
+
+    """
+
+    def __init__(self, x: int, y: int, w: int, h: int, img: str) -> None:
         super().__init__(x, y, w, h, img)
         self.infected = False
         self.infected_seat = None

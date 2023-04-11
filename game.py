@@ -239,7 +239,7 @@ class GameInstance:
             self.player.move_y(self.player_direction_y, self.HEIGHT, self.objects)
 
             self.animation_tick += 1
-            if self.animation_tick > 10:
+            if self.animation_tick > 40:
                 self.animation_tick = 0
                 self.animation_frame += 1
             self.clock.tick(self.tick_rate)
