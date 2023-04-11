@@ -158,17 +158,20 @@ class GameInstance:
         @return: None
         """
         # Initial draw of game objects
-
         self.draw_objects()
+
         # Display the splash screen to the player.
         SplashDialog(self, 'Welcome to lab Hunt!')
         while True:
+
             # Update the screen.
             # if animation_frame > 60:
             #     animation_frame = 40
             self.draw_objects()
+
             # Listen for events
             for event in pygame.event.get():
+
                 # Event Listener for Closing Window
                 if event.type == QUIT:
                     # Quit the game if event fired.

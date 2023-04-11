@@ -1,8 +1,8 @@
 import random
 
-from windows.ui_InteractableObject import UIInteractableObject
 from dialog.textObject import TextObject
 from windows.interactiveWindow import InteractiveWindow
+from windows.ui_ButtonObject import ButtonObject
 import pygame
 import sys
 from pygame.locals import QUIT
@@ -43,7 +43,8 @@ class ServerWindow(InteractiveWindow):
         self.h = 600
         self.img = pygame.image.load('assets/dialog_window.png')
         self.img = pygame.transform.scale(self.img, (self.w, self.h))
-        self.status = True
+        self.feed_status = True
+        self.window_running = True
 
         self.x_spacing = 200
         self.col_0 = self.x + self.x_spacing - 100
@@ -61,8 +62,8 @@ class ServerWindow(InteractiveWindow):
             TextObject(None, f'Source', self.col_0, self.y + 80, 12),
             TextObject(None, f'Destination', self.col_1, self.y + 80, 12),
             TextObject(None, f'URL', self.col_2, self.y + 80, 12),
-            UIInteractableObject(self.x + self.w - 160, self.y + 120, 80, 80, 'assets/red.png'),
-            UIInteractableObject(self.x + self.w - 160, self.y + self.h - 180, 80, 80, 'assets/red.png'),
+            ButtonObject(self.x + self.w - 160, self.y + 120, 80, 80, 'assets/red.png', object_id='serv_button_START'),
+            ButtonObject(self.x + self.w - 160, self.y + self.h - 180, 80, 80, 'assets/red.png', object_id='serv_button_STOP'),
 
         ]
         self.log_text = [
@@ -122,10 +123,19 @@ class ServerWindow(InteractiveWindow):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         game_instance.draw_objects()
-                        self.status = False
+                        self.window_running = False
+                        self.feed_status = False
                         return
                 if event.type == pygame.MOUSEBUTTONUP:
-                    pass
+                    for index, selection in enumerate(self.menu_options):
+                        if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
+                            if selection.object_id == 'serv_button_START':
+                                print('pressed start')
+                                self.feed_status = False
+
+                            if selection.object_id == 'serv_button_STOP':
+                                print('pressed stop')
+                                self.feed_status = True
 
             pygame.display.update()
             await asyncio.sleep(0.001)
@@ -138,39 +148,44 @@ class ServerWindow(InteractiveWindow):
         """
         i = 0
         h = 25
-        while self.status:
-            log_index = self.log_text[i]
-            for text in self.log_text:
-                text.y -= h
+
+        # Main loop
+        while self.window_running:
+            # Inner loop to run the text.
+            while self.feed_status:
+                log_index = self.log_text[i]
+                for text in self.log_text:
+                    text.y -= h
+                await asyncio.sleep(0.3)
+                random_table = random.randint(0, len(game_instance.tables) - 1)
+                random_npc = random.randint(0, 3)
+                random_source_ip = game_instance.tables[random_table].npcs[random_npc].ip
+                random_website, random_destination_ip = random.choice(list(ip_addresses.items()))
+                random_mac = game_instance.tables[random_table].npcs[random_npc].mac
+
+                # Append the source IP
+                self.log_text.append(TextObject(
+                    game_instance=None,
+                    string=f'{random_source_ip}',
+                    x=self.col_0,
+                    y=self.row_0,
+                    size=18))
+
+                # Append the destination IP
+                self.log_text.append(TextObject(
+                    game_instance=None,
+                    string=f'{random_destination_ip}',
+                    x=self.col_1,
+                    y=self.row_0,
+                    size=18))
+
+                # Append the website url
+                self.log_text.append(TextObject(
+                    game_instance=None,
+                    string=f'{random_website}',
+                    x=self.col_2,
+                    y=self.row_0,
+                    size=18))
+
+                i += 1
             await asyncio.sleep(0.3)
-            random_table = random.randint(0, len(game_instance.tables) - 1)
-            random_npc = random.randint(0, 3)
-            random_source_ip = game_instance.tables[random_table].npcs[random_npc].ip
-            random_website, random_destination_ip = random.choice(list(ip_addresses.items()))
-            random_mac = game_instance.tables[random_table].npcs[random_npc].mac
-
-            # Append the source IP
-            self.log_text.append(TextObject(
-                game_instance=None,
-                string=f'{random_source_ip}',
-                x=self.col_0,
-                y=self.row_0,
-                size=18))
-
-            # Append the destination IP
-            self.log_text.append(TextObject(
-                game_instance=None,
-                string=f'{random_destination_ip}',
-                x=self.col_1,
-                y=self.row_0,
-                size=18))
-
-            # Append the website url
-            self.log_text.append(TextObject(
-                game_instance=None,
-                string=f'{random_website}',
-                x=self.col_2,
-                y=self.row_0,
-                size=18))
-
-            i += 1
