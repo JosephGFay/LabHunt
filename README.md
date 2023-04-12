@@ -1,5 +1,4 @@
-# Lab
-Potential Final Project
+
 # Lab Hunt
 A game of deduction where the player must monitor and examine students within the lab in order to expose the bad actor.
 
