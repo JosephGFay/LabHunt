@@ -72,7 +72,7 @@ class GameInstance:
         A GameObject instance that represents the game's network server.
     objects: list[list[GameObject]]
         A nested list of GameObject instances that represent all the game objects used for rendering.
-
+    # TODO Add more documentation for GameInstance attributes
     Methods
     ----------
     # TODO Add more documentation for GameInstance methods
@@ -160,20 +160,24 @@ class GameInstance:
         # Initial draw of game objects
 
         self.draw_objects()
+
         # Display the splash screen to the player.
         SplashDialog(self, 'Welcome to lab Hunt!')
+
         while True:
-            # Update the screen.
-            # if animation_frame > 60:
-            #     animation_frame = 40
+
+            # Draw the objects to the screen.
             self.draw_objects()
+
             # Listen for events
             for event in pygame.event.get():
+
                 # Event Listener for Closing Window
                 if event.type == QUIT:
                     # Quit the game if event fired.
                     pygame.quit()
                     sys.exit()
+
                 # Event Listener for key press
                 if event.type == pygame.KEYDOWN:
 
@@ -260,14 +264,17 @@ class GameInstance:
         if self.animation_frame > len(folder_contents)-1:
             self.animation_frame = 0
 
-        self.tv_left.img = pygame.image.load(folder_path + '/' + folder_contents[self.animation_frame])
+        tv_full_path = folder_path + '/' + folder_contents[self.animation_frame]
 
+        # Load the left TV image and scale.
+        self.tv_left.img = pygame.image.load(tv_full_path)
         self.tv_left.img = pygame.transform.scale(self.tv_left.img, (self.tv_left.w, self.tv_left.h))
 
-        self.tv_right.img = pygame.image.load(folder_path + '/' + folder_contents[self.animation_frame])
-
+        # Load the right TV image and scale.
+        self.tv_right.img = pygame.image.load(tv_full_path)
         self.tv_right.img = pygame.transform.scale(self.tv_right.img, (self.tv_right.w, self.tv_right.h))
 
+        # Blit both tv's to screen.
         self.game_window.blit(self.tv_left.img, (self.tv_left.x, self.tv_left.y))
         self.game_window.blit(self.tv_right.img, (self.tv_right.x, self.tv_right.y))
 
