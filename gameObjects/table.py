@@ -15,11 +15,12 @@ class Table(GameObject):
         self.font = None
         self.infected = False
         self.interactable = True
+        self.name = ''
         self.render()
         self.top_seat = (self.x + 52, self.y - 32)
         self.right_seat = ((self.x + self.w), (self.y + 46))
         self.left_seat = ((self.x - 64), (self.y + 46))
-        self.bottom_seat = ( self.x + 46, (self.y + self.h - 60))
+        self.bottom_seat = (self.x + 46, (self.y + self.h - 60))
 
         self.npc_top = NPC(
             x=self.top_seat[0],
@@ -72,7 +73,7 @@ class Table(GameObject):
 
     def render(self):
         self.font = pygame.font.Font('freesansbold.ttf', 16)
-        self.text = self.font.render('Infected' if self.infected else self.name, True, green)
+        self.text = self.font.render('' if self.infected else self.name, True, green)
         self.textRect = self.text.get_rect()
         self.textRect.center = (self.x + 80, self.y + 70)
         if self.infected:

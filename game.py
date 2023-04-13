@@ -36,42 +36,42 @@ random.shuffle(npc_data['names'])
 
 class GameInstance:
     """
-    Game instance class created to house the main functionality of the game.
+    The GameInstance class houses the main functionality of the game.
 
-    Attributes
+    Attributes:
     -----------
-    WIDTH : int
-        Variable for the window width.
-    HEIGHT : int
-        Variable for the window height.
-    game_window : Surface
-        The main game window.
-    clock : Clock
-        mirrors the pygame clock.
-    tick_rate : int
-        Handles the FPS for the clock.
-    dialog_running : bool
-        Checks if there is an active dialog window running
-    interaction_running : bool
-        Checks if there is n active interaction running.
-    npc_data : dict
-        Holds the data for the npcs
-    background : GameObject
-        Sets the background to a gameObject class that is same size as window.
-    player : Player
-        Stores the player data and methods
-    player_direction_x : int.
-        Sets direction on the horizontal axis
-    player_direction y: int
-        sets direction on the vertical axis.
-    table0-table5: Table
-        Initialize tables within the game instance.
+    WIDTH: int
+        The width of the game window.
+    HEIGHT: int
+        The height of the game window.
+    game_window: pygame.Surface
+        The main game window that will be rendered on.
+    clock: pygame.time.Clock
+        A clock object used to handle FPS and game timing.
+    tick_rate: int
+        The desired tick rate (in FPS) for the clock.
+    dialog_running: bool
+        A flag to check whether there is an active dialog window running.
+    interaction_running: bool
+        A flag to check whether there is an active interaction running.
+    npc_data: dict
+        A dictionary containing data for all the non-playable characters (NPCs) in the game.
+    background: GameObject
+        A GameObject instance that represents the game's background. It should be the same size as the game window.
+    player: Player
+        A Player instance that represents the game's main player character. It stores the player's data and methods.
+    player_direction_x: int
+        A value that represents the player's direction on the horizontal (x) axis.
+    player_direction_y: int
+        A value that represents the player's direction on the vertical (y) axis.
+    table0 - table5: Table
+        Table instances that represent specific game tables within the game instance.
     tables: list[Table]
-        A collection of the game tables.
+        A list of Table instances that represent all the game tables in the game instance.
     server: GameObject
-        The games Network Server object.
-    objects: list[[objects]]
-        Nested list of objects used for rendering.
+        A GameObject instance that represents the game's network server.
+    objects: list[list[GameObject]]
+        A nested list of GameObject instances that represent all the game objects used for rendering.
 
     Methods
     ----------
@@ -158,20 +158,17 @@ class GameInstance:
         @return: None
         """
         # Initial draw of game objects
-        self.draw_objects()
 
+        self.draw_objects()
         # Display the splash screen to the player.
         SplashDialog(self, 'Welcome to lab Hunt!')
         while True:
-
             # Update the screen.
             # if animation_frame > 60:
             #     animation_frame = 40
             self.draw_objects()
-
             # Listen for events
             for event in pygame.event.get():
-
                 # Event Listener for Closing Window
                 if event.type == QUIT:
                     # Quit the game if event fired.
@@ -234,15 +231,15 @@ class GameInstance:
             # End Event Listeners
 
             # Handle Player Movement.
-            # Each movement function takes in 3 parameters.
-            # Direction - Which direction the character is currently moving based on key press.
-            # Max Width/Max Height - Supplies the boundaries for the window to contain player.
-            # Objects - Provides a list of lists which contain all collide-able objects.
+            # Each movement function takes in 3 parameters:
+            # - Direction: Which direction the character is currently moving based on.
+            # - Max Width/Max Height: Supplies the boundaries for the window to contain the player's movement.
+            # - Objects: Provides a list of lists which contain all collide-able objects.
             self.player.move_x(self.player_direction_x, self.WIDTH, self.objects)
             self.player.move_y(self.player_direction_y, self.HEIGHT, self.objects)
 
             self.animation_tick += 1
-            if self.animation_tick > 40:
+            if self.animation_tick > 10:
                 self.animation_tick = 0
                 self.animation_frame += 1
             self.clock.tick(self.tick_rate)
@@ -277,10 +274,12 @@ class GameInstance:
         # Draw Menu Bar
         self.game_window.blit(self.menu.img, (self.menu.x, self.menu.y))
         self.game_window.blit(self.menu.text, self.menu.textRect)
-        # Set an infected NPC
-        for table in self.tables:
-            for seat in table.npcs:
-                seat.check_infected()
+
+        # # Set an infected NPC
+        # for table in self.tables:
+        #     for seat in table.npcs:
+        #         seat.check_infected()
+
         # Draw Object List
         for object_list in self.objects:
             for game_object in object_list:
