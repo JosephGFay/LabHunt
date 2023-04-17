@@ -1,5 +1,4 @@
 from game import GameInstance
-
 # Entry Point file for the main game loop.
 
 if __name__ == "__main__":

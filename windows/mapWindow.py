@@ -8,12 +8,11 @@ import sys
 from pygame.locals import QUIT
 import Joetilities.utilities
 from windows.logWindow import LogWindow
-from windows.mapWindow import MapWindow
 
 
-class ServerWindow(InteractiveWindow):
+class MapWindow(InteractiveWindow):
     """
-        Class for creating the interface for the games server object.
+        Class for creating the interface for the games server map screen.
 
     Attributes
     ----------
@@ -52,26 +51,25 @@ class ServerWindow(InteractiveWindow):
         self.col_2 = self.col_1 + self.x_spacing
         self.col_3 = self.col_2 + self.x_spacing
 
-        self.row_0 = self.y + 80
+        self.row_0 = self.y + 140
         self.row_1 = self.row_0 + 80
         self.row_2 = self.row_1 + 80
         self.row_3 = self.row_2 + 80
         self.row_4 = self.row_3 + 80
-
         self.ui_elements = [
-            TextObject(None, 'LabServer 2022', self.col_0, self.row_0, 36),
 
-            TextObject(None, 'View Logs', self.col_0 + 80, self.row_1, 24),
+            TextObject(None, 'Network Map', self.col_0, self.y + 80, 36),
 
-            ButtonObject(self.col_0, self.row_1 - 8, 280, 40, 'assets/green.png', object_id='logs'),
+            ButtonObject(self.col_0, self.row_0, 80, 80, 'assets/red.png', object_id='top_left'),
 
-            TextObject(None, 'View Maps', self.col_0 + 80, self.row_2 + 10, 24),
+            ButtonObject(self.col_0, self.row_4, 80, 80, 'assets/red.png', object_id='bottom_left'),
 
-            ButtonObject(self.col_0, self.row_2, 280, 40, 'assets/green.png', object_id='map'),
+            ButtonObject(self.col_1, self.row_2, 80, 80, 'assets/red.png', object_id='bottom_middle'),
 
-            ButtonObject(self.col_0, self.row_3, 280, 40, 'assets/green.png', object_id='na'),
+            ButtonObject(self.col_2, self.row_0, 80, 80, 'assets/red.png', object_id='top_right'),
 
-            ButtonObject(self.col_0, self.row_4, 280, 40, 'assets/green.png', object_id='na'),
+            ButtonObject(self.col_2, self.row_2, 80, 80, 'assets/red.png', object_id='bottom_right'),
+
         ]
 
         # Run both window loops.
@@ -128,8 +126,6 @@ class ServerWindow(InteractiveWindow):
                         if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
                             if selection.object_id == 'logs':
                                 LogWindow(game_instance)
-                            if selection.object_id == 'map':
-                                MapWindow(game_instance)
 
             pygame.display.update()
 
