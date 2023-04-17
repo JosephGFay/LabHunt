@@ -218,7 +218,7 @@ class GameInstance:
                             # Render the Table Window is table is selected.
                             TableWindow(self.player.adjacent_object).display(self, self.player.adjacent_object)
                         if self.player.adjacent_object.__class__.__name__ == 'Server':
-                            # Render the Table Window is table is selected.
+                            # Render the Server Window is table is selected.
                             ServerWindow(self)
 
                 # Event Listener for released keys.
