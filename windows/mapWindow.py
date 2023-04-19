@@ -68,7 +68,7 @@ class MapWindow(InteractiveWindow):
 
             ButtonObject(self.col_2, self.row_0, 80, 80, 'assets/red.png', object_id='top_right'),
 
-            ButtonObject(self.col_2, self.row_2, 80, 80, 'assets/red.png', object_id='bottom_right'),
+            ButtonObject(self.col_2, self.row_4, 80, 80, 'assets/red.png', object_id='bottom_right'),
 
         ]
 
