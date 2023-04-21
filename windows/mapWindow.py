@@ -8,32 +8,11 @@ import sys
 from pygame.locals import QUIT
 import Joetilities.utilities
 from windows.logWindow import LogWindow
+from dataclasses import dataclass
 
 
+@dataclass
 class MapWindow(InteractiveWindow):
-    """
-        Class for creating the interface for the games server map screen.
-
-    Attributes
-    ----------
-        x : int
-          A coordinate value to be used for horizontal positioning.
-        y : int
-          A coordinate value to be used for vertical positioning
-        w : int
-          Determines the width of the object.
-        h : int
-          Determines the height of the object.
-        img : str
-          String path to image file.
-        ui_elements: list[ui_Object]
-            A list of ui objects that will be drawn to the screen using populate_menu_options()
-
-    Methods
-    ----------
-    display:
-    # TODO Add documentation for methods.
-    """
 
     def __init__(self, game_instance):
         super().__init__()
@@ -71,20 +50,13 @@ class MapWindow(InteractiveWindow):
             ButtonObject(self.col_2, self.row_4, 80, 80, 'assets/red.png', object_id='bottom_right'),
 
         ]
+        # Run post initialization processes.
+        self.__post__init__(game_instance)
 
-        # Run both window loops.
+    def __post__init__(self, game_instance) -> None:
         self.display(game_instance)
 
     def display(self, game_instance) -> None:
-        """
-        A method of ServerWindow that draws the window to the screen.
-
-        @param game_instance: GameInstance
-        @return: None
-        """
-
-        # Window Running Loop for the instance.
-        # initialize log index at the beginning of the log list.
 
         while True:
             self.populate_menu_options(self.ui_elements)
