@@ -28,7 +28,9 @@ This module imports the following packages and modules:
 
 """
 
-black = (50,50,50)
+black = (50, 50, 50)
+
+
 class LogWindow(InteractiveWindow):
     """
         Class for creating the interface for the games server object.
@@ -232,204 +234,88 @@ class LogWindow(InteractiveWindow):
         random_website, random_destination_ip = random.choice(list(ip_addresses.items()))
         return random_website
 
+    def set_traffic_text(self, source, destination, protocol, website, text_size, background_color):
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{" "*250}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size,
+            back_ground_color=background_color,
+            color=black
+
+        ))
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{source}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size,
+            back_ground_color=background_color,
+            color=black
+
+        ))
+        # Append the destination IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{destination}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size,
+            back_ground_color=background_color,
+            color=black
+
+        ))
+        # Append the website url
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{protocol}',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size,
+            back_ground_color=background_color,
+            color=black
+
+        ))
+        # Append the website url
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{website}',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size,
+            back_ground_color=background_color,
+            color=black
+        ))
+
     async def get_http_traffic(self):
-        text_size = 12
         background_color = (51, 214, 103)
         random_source_ip = self.get_random_ip()
         random_destination_ip = self.get_random_destination()
         random_website = self.get_random_website()
         await self.get_dns_query(random_source_ip, random_website)
         await self.get_tcp(random_source_ip, random_destination_ip)
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{random_source_ip}{" "*220}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-
-        ))
-
-        # Append the destination IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{random_destination_ip}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-
-        ))
-
-        # Append the website url
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='HTTP',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-
-        ))
-
-        # Append the website url
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{random_website}',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-
-        ))
+        self.set_traffic_text(random_source_ip, random_destination_ip, 'HTTP', random_website, 12, background_color)
 
     def get_arp_traffic(self):
         text_size = 12
         background_color = (227, 227, 109)
         random_destination_ip = self.get_random_ip()
         random_destination_mac = self.get_random_mac()
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{self.router_mac}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the destination IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{random_destination_mac}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the protocol
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='ARP',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the info
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'who has {random_destination_ip}? Tell {self.router_ip}',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
+        self.set_traffic_text(self.router_mac, random_destination_mac, 'ARP', f'who has {random_destination_ip}? Tell {self.router_ip}', 12, background_color)
 
     def get_hacker_arp_traffic(self):
         text_size = 12
         background_color = (227, 227, 109)
         random_destination_ip = self.get_random_ip()
         random_destination_mac = self.get_random_mac()
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{self.router_mac}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the destination IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{random_destination_mac}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the protocol
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='ARP',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the info
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'who has {random_destination_ip}? Tell {self.hacker_ip}',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
+        self.set_traffic_text(self.router_mac, random_destination_mac, 'ARP', f'who has {random_destination_ip}? Tell {self.hacker_ip}', 12, background_color)
 
     async def get_dns_query(self, source_ip, website):
         text_size = 12
         background_color = (29, 209, 191)
         hex_code = self.random_hex()
-        # Append the source IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{source_ip}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the DNS server IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{self.router_ip}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the protocol
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='DNS',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the info
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'Standard query 0x{hex_code} {website}',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
+        self.set_traffic_text(source_ip, self.router_ip, 'DNS', f'Standard query 0x{hex_code} {website}', 12, background_color)
         await asyncio.sleep(0.6)
         self.move_text_up()
         await self.get_dns_response(source_ip, website, hex_code)
@@ -437,49 +323,7 @@ class LogWindow(InteractiveWindow):
     async def get_dns_response(self, source_ip, website, hex_code):
         text_size = 12
         background_color = (29, 209, 191)
-        # Append the source IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{self.router_ip}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the DNS server IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{source_ip}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the protocol
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='DNS',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the info
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'Standard query response 0x{hex_code} {website}',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
+        self.set_traffic_text(self.router_ip, source_ip, 'DNS', f'Standard query response 0x{hex_code} {website}', 12, background_color)
         self.move_text_up()
         await asyncio.sleep(0.6)
 
@@ -487,50 +331,8 @@ class LogWindow(InteractiveWindow):
         text_size = 12
         background_color = (29, 209, 191)
         port = random.randint(40000, 59000)
-        hex_code = self.random_hex()
-        # Append the source IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{source_ip}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
+        self.set_traffic_text(source_ip, website_ip, 'TCP', f'{port} -> {80} [SYN] Seq=0 Win=64240 Len=0', 12, background_color)
 
-        # Append the DNS server IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{website_ip}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the protocol
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='TCP',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the info
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{port} -> {80} [SYN] Seq=0 Win=64240 Len=0',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
         await asyncio.sleep(0.6)
         self.move_text_up()
         await self.get_tcp_ack(source_ip, website_ip, port)
@@ -538,50 +340,7 @@ class LogWindow(InteractiveWindow):
     async def get_tcp_ack(self, source_ip, website_ip, port):
         text_size = 12
         background_color = (29, 209, 191)
-        # Append the source IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{self.router_ip}',
-            x=self.col_0,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the DNS server IP
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{self.router_ip}',
-            x=self.col_1,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the protocol
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string='TCP',
-            x=self.col_2,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
-        # Append the info
-        self.log_text.append(TextObject(
-            game_instance=None,
-            string=f'{80} -> {port} [SYN, ACK] Seq=0 Ack=1 Win=26847 Len=0',
-            x=self.col_3,
-            y=self.row_0,
-            size=text_size,
-            back_ground_color=background_color,
-            color=black
-        ))
-
+        self.set_traffic_text(website_ip, source_ip, 'TCP', f'{80} -> {port} [SYN, ACK] Seq=0 Ack=1 Win=26847 Len=0', 12, background_color)
         self.move_text_up()
         await asyncio.sleep(0.6)
 
