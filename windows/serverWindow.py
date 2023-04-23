@@ -61,7 +61,7 @@ class ServerWindow(InteractiveWindow):
         self.ui_elements = [
             TextObject(None, 'LabServer 2022', self.col_0, self.row_0, 36),
 
-            TextObject(None, 'View Logs', self.col_0 + 80, self.row_1, 24),
+            TextObject(None, 'View Traffic', self.col_0 + 80, self.row_1, 24),
 
             ButtonObject(self.col_0, self.row_1 - 8, 280, 40, 'assets/green.png', object_id='logs'),
 

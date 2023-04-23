@@ -1,5 +1,5 @@
 import random
-
+import time
 from dialog.textObject import TextObject
 from windows.interactiveWindow import InteractiveWindow
 from windows.ui_ButtonObject import ButtonObject
@@ -9,6 +9,24 @@ from pygame.locals import QUIT
 import Joetilities.utilities
 import asyncio
 from data.server_data import ip_addresses
+
+"""
+
+This module provides functionality for a game that involves interacting with text-based dialog windows and buttons.
+
+This module imports the following packages and modules:
+    - random: Provides functions for generating random numbers and other random operations.
+    - TextObject: A class for creating text objects in Pygame.
+    - InteractiveWindow: A class for creating interactive windows that can display text and buttons.
+    - ButtonObject: A class for creating interactive buttons in Pygame.
+    - pygame: Provides functionality for creating games and interactive applications in Python.
+    - sys: Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter.
+    - QUIT: A Pygame event constant for the "quit" event.
+    - Joetilities.utilities: A custom module with various utility functions.
+    - asyncio: Provides infrastructure for writing single-threaded concurrent code using coroutines, multiplexing I/O access over sockets and other resources, running network clients and servers, and other related primitives.
+    - ip_addresses: A list of IP addresses used for the game's server functionality.
+
+"""
 
 
 class LogWindow(InteractiveWindow):
@@ -38,6 +56,7 @@ class LogWindow(InteractiveWindow):
 
     def __init__(self, game_instance):
         super().__init__()
+        self.game_instance = game_instance
         self.x = 100
         self.w = 1000
         self.h = 600
@@ -45,12 +64,13 @@ class LogWindow(InteractiveWindow):
         self.img = pygame.transform.scale(self.img, (self.w, self.h))
         self.feed_status = True
         self.window_running = True
-
+        self.router_ip = '99.106.62.1'
+        self.router_mac = '04:09:58:7d:7b:27'
         self.x_spacing = 200
         self.col_0 = self.x + self.x_spacing - 100
-        self.col_1 = self.col_0 + self.x_spacing
-        self.col_2 = self.col_1 + self.x_spacing
-        self.col_3 = self.col_2 + self.x_spacing
+        self.col_1 = self.col_0 + self.x_spacing - 50
+        self.col_2 = self.col_1 + self.x_spacing - 50
+        self.col_3 = self.col_2 + self.x_spacing - 130
 
         self.row_0 = self.y + self.h - 50
         self.row_1 = self.y
@@ -61,9 +81,12 @@ class LogWindow(InteractiveWindow):
         self.ui_elements = [
             TextObject(None, f'Source', self.col_0, self.y + 80, 12),
             TextObject(None, f'Destination', self.col_1, self.y + 80, 12),
-            TextObject(None, f'URL', self.col_2, self.y + 80, 12),
-            ButtonObject(self.x + self.w - 170+5, self.y + 80, 40, 40, 'assets/green.png', object_id='serv_button_START'),
-            ButtonObject(self.x + self.w - 120+5, self.y + 80, 40, 40, 'assets/red.png', object_id='serv_button_STOP'),
+            TextObject(None, f'Protocol', self.col_2, self.y + 80, 12),
+            TextObject(None, f'Info', self.col_3, self.y + 80, 12),
+            ButtonObject(self.x + self.w - 170 + 5, self.y + 80, 40, 40, 'assets/green.png',
+                         object_id='serv_button_START'),
+            ButtonObject(self.x + self.w - 120 + 5, self.y + 80, 40, 40, 'assets/red.png',
+                         object_id='serv_button_STOP'),
 
         ]
         self.log_text = [
@@ -71,16 +94,15 @@ class LogWindow(InteractiveWindow):
         ]
 
         # Run both window loops.
-        asyncio.run(self.log_screen(game_instance))
+        asyncio.run(self.log_screen())
 
-    async def log_screen(self, game_instance):
-        await asyncio.gather(self.start_traffic(game_instance), self.display(game_instance))
+    async def log_screen(self):
+        await asyncio.gather(self.start_traffic(), self.display())
 
-    async def display(self, game_instance) -> None:
+    async def display(self) -> None:
         """
         A method of LogWindow that draws the window to the screen.
 
-        @param game_instance: GameInstance
         @return: None
         """
 
@@ -91,10 +113,10 @@ class LogWindow(InteractiveWindow):
             self.populate_menu_options(self.ui_elements + self.log_text)
 
             # Display the background dialog window
-            game_instance.game_window.blit(self.img, (self.x, self.y))
+            self.game_instance.game_window.blit(self.img, (self.x, self.y))
 
             # Display all selection menu objects in menu_options list.
-            self.draw_ui_objects(game_instance)
+            self.draw_ui_objects()
 
             # Get Mouse Position
             mouse_pos = pygame.mouse.get_pos()
@@ -117,7 +139,7 @@ class LogWindow(InteractiveWindow):
                 # Listen for KEY events
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        game_instance.draw_objects()
+                        self.game_instance.draw_objects()
                         self.window_running = False
                         self.feed_status = False
                         return
@@ -149,73 +171,335 @@ class LogWindow(InteractiveWindow):
             pygame.display.update()
             await asyncio.sleep(0.001)
 
-    async def start_traffic(self, game_instance) -> None:
+    async def start_traffic(self) -> None:
         """
         Populates the log_text with random traffic and moves the text up.
-        @param game_instance:
         @return: None
         """
-        i = 0
         h = 25
-
         # Main loop
         while self.window_running:
             # Inner loop to run the text.
             while self.feed_status:
-                log_index = self.log_text[i]
-
+                traffic_type = self.get_traffic_type()
                 for text in self.log_text:
                     text.y -= h
                 await asyncio.sleep(0.3)
-                random_table = random.randint(0, len(game_instance.tables) - 1)
-                random_npc = random.randint(0, 3)
-                random_source_ip = game_instance.tables[random_table].npcs[random_npc].ip
-                random_website, random_destination_ip = random.choice(list(ip_addresses.items()))
-                random_mac = game_instance.tables[random_table].npcs[random_npc].mac
 
-                # Append the source IP
-                self.log_text.append(TextObject(
-                    game_instance=None,
-                    string=f'{random_source_ip}',
-                    x=self.col_0,
-                    y=self.row_0,
-                    size=18))
+                match traffic_type:
+                    case 'HTTP':
+                        await self.get_http_traffic()
+                    case 'ARP':
+                        self.get_arp_traffic()
 
-                # Append the destination IP
-                self.log_text.append(TextObject(
-                    game_instance=None,
-                    string=f'{random_destination_ip}',
-                    x=self.col_1,
-                    y=self.row_0,
-                    size=18))
-
-                # Append the website url
-                self.log_text.append(TextObject(
-                    game_instance=None,
-                    string=f'{random_website}',
-                    x=self.col_2,
-                    y=self.row_0,
-                    size=18))
-
-                i += 1
             await asyncio.sleep(0.3)
 
+    @staticmethod
+    def get_traffic_type():
+        traffic_types = ['HTTP', 'ARP']
+        random_number = random.randint(0, 1)
+        match random_number:
+            case 1:
+                return traffic_types[1]
+            case _:
+                return traffic_types[0]
+
+    def get_random_ip(self):
+        random_table = random.randint(0, len(self.game_instance.tables) - 1)
+        random_npc = random.randint(0, 3)
+        return self.game_instance.tables[random_table].npcs[random_npc].ip
+
+    def get_random_mac(self):
+        random_table = random.randint(0, len(self.game_instance.tables) - 1)
+        random_npc = random.randint(0, 3)
+        return self.game_instance.tables[random_table].npcs[random_npc].mac
+
+    @staticmethod
+    def get_random_destination():
+        random_website, random_destination_ip = random.choice(list(ip_addresses.items()))
+        return random_destination_ip
+
+    @staticmethod
+    def get_random_website():
+        random_website, random_destination_ip = random.choice(list(ip_addresses.items()))
+        return random_website
+
+    async def get_http_traffic(self):
+        text_size = 12
+        random_source_ip = self.get_random_ip()
+        random_destination_ip = self.get_random_destination()
+        random_website = self.get_random_website()
+        await self.get_dns_query(random_source_ip, random_website)
+        await self.get_tcp(random_source_ip, random_destination_ip)
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{random_source_ip}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the destination IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{random_destination_ip}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the website url
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string='HTTP',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the website url
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{random_website}',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size))
+
+    def get_arp_traffic(self):
+        text_size = 12
+        random_destination_ip = self.get_random_ip()
+        random_destination_mac = self.get_random_mac()
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{self.router_mac}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the destination IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{random_destination_mac}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the protocol
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string='ARP',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the info
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'who has {random_destination_ip}? Tell {self.router_ip}',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size))
+
+    async def get_dns_query(self, source_ip, website):
+        text_size = 12
+        hex_code = self.random_hex()
+        # Append the source IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{source_ip}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the DNS server IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{self.router_ip}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the protocol
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string='DNS',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the info
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'Standard query 0x{hex_code} {website}',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size))
+        await asyncio.sleep(0.6)
+        self.move_text_up()
+        await self.get_dns_response(source_ip, website, hex_code)
+
+    async def get_dns_response(self, source_ip, website, hex_code):
+        text_size = 12
+        # Append the source IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{self.router_ip}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the DNS server IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{source_ip}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the protocol
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string='DNS',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the info
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'Standard query response 0x{hex_code} {website}',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size))
+        self.move_text_up()
+        await asyncio.sleep(0.6)
+
+    async def get_tcp(self, source_ip, website_ip):
+        text_size = 12
+        port = random.randint(40000, 59000)
+        hex_code = self.random_hex()
+        # Append the source IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{source_ip}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the DNS server IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{website_ip}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the protocol
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string='TCP',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the info
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{port} -> {80} [SYN] Seq=0 Win=64240 Len=0',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size))
+        await asyncio.sleep(0.6)
+        self.move_text_up()
+        await self.get_tcp_ack(source_ip, website_ip, port)
+
+    async def get_tcp_ack(self, source_ip, website_ip, port):
+        text_size = 12
+        # Append the source IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{self.router_ip}',
+            x=self.col_0,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the DNS server IP
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{self.router_ip}',
+            x=self.col_1,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the protocol
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string='TCP',
+            x=self.col_2,
+            y=self.row_0,
+            size=text_size))
+
+        # Append the info
+        self.log_text.append(TextObject(
+            game_instance=None,
+            string=f'{80} -> {port} [SYN, ACK] Seq=0 Ack=1 Win=26847 Len=0',
+            x=self.col_3,
+            y=self.row_0,
+            size=text_size))
+
+        self.move_text_up()
+        await asyncio.sleep(0.6)
+
+    @staticmethod
+    def random_hex():
+        # Generate a random integer between 0 and 16^4-1 (which is the maximum 4-digit hexadecimal number)
+        random_int = random.randint(0, 16 ** 4 - 1)
+
+        # Convert the integer to a hexadecimal string with 4 characters
+        return hex(random_int)[2:].zfill(4)
+
     def scroll_up(self):
+        """
+        Scrolls the menu text up by 25 pixels, if possible.
+
+        If the bottom of the last text item in the menu is at the same y-coordinate
+        as the top row of the menu (self.row_0), the text items are shifted up by 25 pixels.
+        """
         if not self.log_text[len(self.log_text) - 1].y == self.row_0:
             for text in self.log_text:
                 text.y -= 25
 
     def scroll_down(self):
+        """
+        Scrolls the menu text down by 25 pixels, if possible.
+
+        If the top of the first text item in the menu is at the same y-coordinate
+        as the bottom row of the menu plus 65 pixels (self.y + 65), the text items
+        are shifted down by 25 pixels.
+        """
         if not self.log_text[0].y >= self.y + 65:
             for text in self.log_text:
                 text.y += 25
 
-    def draw_ui_objects(self, game_instance):
+    def draw_ui_objects(self):
+        """
+        Draws the menu options and selection indicator on the game window.
+
+        The menu options are drawn using their x and y coordinates, and their images.
+        If a menu option is currently selected, a selection indicator image is drawn
+        on top of the option's image. The menu options that are visible within the
+        menu's boundaries (between self.row_0 and self.y + 80) are drawn.
+
+        Args:
+        - game_instance: An instance of the game, used to access the game window.
+        """
         for index, selection in enumerate(self.menu_options):
             if self.y + 80 <= selection.y <= self.row_0:
                 if index == self.selection:
                     self.img_sel = pygame.transform.scale(self.img_sel, (selection.w, selection.h))
-                    game_instance.game_window.blit(selection.img, (selection.x, selection.y))
-                    game_instance.game_window.blit(self.img_sel, (selection.x, selection.y))
+                    self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
+                    self.game_instance.game_window.blit(self.img_sel, (selection.x, selection.y))
                 else:
-                    game_instance.game_window.blit(selection.img, (selection.x, selection.y))
+                    self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
+
+    def move_text_up(self):
+        h = 25
+        for text in self.log_text:
+            text.y -= h
