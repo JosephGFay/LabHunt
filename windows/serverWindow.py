@@ -59,19 +59,15 @@ class ServerWindow(InteractiveWindow):
         self.row_4 = self.row_3 + 80
 
         self.ui_elements = [
-            TextObject(None, 'LabServer 2022', self.col_0, self.row_0, 36),
+            TextObject(None, 'LabServer 2022', self.col_1 + 50, self.row_0, 36),
 
-            TextObject(None, 'View Traffic', self.col_0 + 80, self.row_1, 24),
+            TextObject(None, 'View Traffic', self.col_1 + 50 + 80, self.row_1, 24),
 
-            ButtonObject(self.col_0, self.row_1 - 8, 280, 40, 'assets/green.png', object_id='logs'),
+            ButtonObject(self.col_1 + 50, self.row_1 - 8, 280, 40, 'assets/green.png', object_id='logs'),
 
-            TextObject(None, 'View Maps', self.col_0 + 80, self.row_2 + 10, 24),
+            TextObject(None, 'View Map', self.col_1 + 50 + 80, self.row_2 + 10, 24),
 
-            ButtonObject(self.col_0, self.row_2, 280, 40, 'assets/green.png', object_id='map'),
-
-            ButtonObject(self.col_0, self.row_3, 280, 40, 'assets/green.png', object_id='na'),
-
-            ButtonObject(self.col_0, self.row_4, 280, 40, 'assets/green.png', object_id='na'),
+            ButtonObject(self.col_1 + 50, self.row_2, 280, 40, 'assets/green.png', object_id='map'),
         ]
 
         # Run both window loops.

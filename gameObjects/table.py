@@ -15,7 +15,7 @@ class Table(GameObject):
         self.font = None
         self.infected = False
         self.interactable = True
-        self.name = ''
+        self.name = name
         self.render()
         self.top_seat = (self.x + 52, self.y - 32)
         self.right_seat = ((self.x + self.w), (self.y + 46))
@@ -30,11 +30,11 @@ class Table(GameObject):
             img='assets/npc_top.png',
         )
         self.npc_right = NPC(
-           x=self.right_seat[0],
-           y=self.right_seat[1],
-           w=60,
-           h=100,
-           img='assets/npc_right.png',
+            x=self.right_seat[0],
+            y=self.right_seat[1],
+            w=60,
+            h=100,
+            img='assets/npc_right.png',
         )
         self.npc_left = NPC(
             x=self.left_seat[0],
@@ -70,16 +70,20 @@ class Table(GameObject):
             npc.mac = npc_data['macs'][len(npc_data['macs']) - 1]
             npc_data['macs'].pop()
 
-
     def render(self):
         self.font = pygame.font.Font('freesansbold.ttf', 16)
-        self.text = self.font.render('' if self.infected else self.name, True, green)
+        self.text = self.font.render(self.name, True, green)
         self.textRect = self.text.get_rect()
         self.textRect.center = (self.x + 80, self.y + 70)
         if self.infected:
-            self.get_hacker(self.npcs)
+            self.set_hacker()
 
-    def get_hacker(self, npc_list):
+    def set_hacker(self):
         infected_seat = random.randint(0, 3)
-        npc_list[infected_seat].infected = True
-        npc_list[infected_seat].infected_seat = infected_seat
+        self.npcs[infected_seat].infected = True
+        self.npcs[infected_seat].infected_seat = infected_seat
+
+    def get_hacker(self):
+        for npc in self.npcs:
+            if npc.infected:
+                return npc

@@ -110,7 +110,8 @@ class GameInstance:
         # Establish Game Objects
         # Initialize the background image
         self.background = GameObject(0, 0, self.WIDTH, self.HEIGHT, 'assets/carpet.png')
-
+        self.infected_table = None
+        self.hacker = None
         # Initialize TVs
         self.tv_left = GameObject(41, 48, 241, 128, 'assets/red.png')
         self.tv_right = GameObject(self.WIDTH - 241-41, 48, 242, 128, 'assets/red.png')
@@ -306,8 +307,7 @@ class GameInstance:
         # Update game display
         pygame.display.update()
 
-    @staticmethod
-    def set_hacker(table_list: list[Table]) -> None:
+    def set_hacker(self, table_list: list[Table]) -> None:
         """
         Populates the game tables with a randomized hacker.
 
@@ -321,3 +321,6 @@ class GameInstance:
         table_list[infected_table].infected = True
         # Re-Render the table to update its sprite.
         table_list[infected_table].render()
+
+        self.infected_table = table_list[infected_table]
+        self.hacker = self.infected_table.get_hacker()
