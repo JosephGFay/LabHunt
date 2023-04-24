@@ -1,5 +1,4 @@
 import random
-import time
 from dialog.textObject import TextObject
 from windows.interactiveWindow import InteractiveWindow
 from windows.ui_ButtonObject import ButtonObject
@@ -11,7 +10,6 @@ import asyncio
 from data.server_data import ip_addresses
 
 """
-
 This module provides functionality for a game that involves interacting with text-based dialog windows and buttons.
 
 This module imports the following packages and modules:
@@ -25,7 +23,6 @@ This module imports the following packages and modules:
     - Joetilities.utilities: A custom module with various utility functions.
     - asyncio: Provides infrastructure for writing single-threaded concurrent code using coroutines, multiplexing I/O access over sockets and other resources, running network clients and servers, and other related primitives.
     - ip_addresses: A list of IP addresses used for the game's server functionality.
-
 """
 
 black = (50, 50, 50)
@@ -88,11 +85,8 @@ class LogWindow(InteractiveWindow):
             TextObject(None, f'Destination', self.col_1, self.y + 80, 12),
             TextObject(None, f'Protocol', self.col_2, self.y + 80, 12),
             TextObject(None, f'Info', self.col_3, self.y + 80, 12),
-            ButtonObject(self.x + self.w - 170 + 5, self.y + 80, 40, 40, 'assets/green.png',
-                         object_id='serv_button_START'),
-            ButtonObject(self.x + self.w - 120 + 5, self.y + 80, 40, 40, 'assets/red.png',
-                         object_id='serv_button_STOP'),
-
+            ButtonObject(self.x + self.w - 190, self.y + 120, 40, 40, 'assets/green.png', object_id='serv_button_START'),
+            ButtonObject(self.x + self.w - 140, self.y + 120, 40, 40, 'assets/red.png', object_id='serv_button_STOP'),
         ]
         self.log_text = [
             TextObject(None, f'', self.col_0, self.row_0, 24),
@@ -237,7 +231,7 @@ class LogWindow(InteractiveWindow):
     def set_traffic_text(self, source, destination, protocol, website, text_size, background_color):
         self.log_text.append(TextObject(
             game_instance=None,
-            string=f'{" "*250}',
+            string=f'{" "*230}',
             x=self.col_0,
             y=self.row_0,
             size=text_size,
@@ -245,6 +239,7 @@ class LogWindow(InteractiveWindow):
             color=black
 
         ))
+
         self.log_text.append(TextObject(
             game_instance=None,
             string=f'{source}',
@@ -259,7 +254,7 @@ class LogWindow(InteractiveWindow):
         self.log_text.append(TextObject(
             game_instance=None,
             string=f'{destination}',
-            x=self.col_1,
+            x=self.col_1-20,
             y=self.row_0,
             size=text_size,
             back_ground_color=background_color,
@@ -270,7 +265,7 @@ class LogWindow(InteractiveWindow):
         self.log_text.append(TextObject(
             game_instance=None,
             string=f'{protocol}',
-            x=self.col_2,
+            x=self.col_2-40,
             y=self.row_0,
             size=text_size,
             back_ground_color=background_color,
@@ -281,7 +276,7 @@ class LogWindow(InteractiveWindow):
         self.log_text.append(TextObject(
             game_instance=None,
             string=f'{website}',
-            x=self.col_3,
+            x=self.col_3-60,
             y=self.row_0,
             size=text_size,
             back_ground_color=background_color,
