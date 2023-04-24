@@ -72,7 +72,7 @@ class LogWindow(InteractiveWindow):
         self.hacker_ip = self.game_instance.hacker.ip
 
         self.x_spacing = 200
-        self.col_0 = self.x + self.x_spacing - 100
+        self.col_0 = self.x + self.x_spacing - 120
         self.col_1 = self.col_0 + self.x_spacing - 50
         self.col_2 = self.col_1 + self.x_spacing - 50
         self.col_3 = self.col_2 + self.x_spacing - 130
@@ -388,7 +388,7 @@ class LogWindow(InteractiveWindow):
         - game_instance: An instance of the game, used to access the game window.
         """
         for index, selection in enumerate(self.menu_options):
-            if self.y + 80 <= selection.y <= self.row_0:
+            if self.y + 120 <= selection.y <= self.row_0 - 70:
                 if index == self.selection:
                     self.img_sel = pygame.transform.scale(self.img_sel, (selection.w, selection.h))
                     self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
