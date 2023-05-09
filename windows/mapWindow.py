@@ -8,10 +8,10 @@ import pygame
 import sys
 from pygame.locals import QUIT
 import Joetilities.utilities
-from dataclasses import dataclass
 
 black = (0, 0, 0)
-@dataclass
+
+
 class MapWindow(InteractiveWindow):
 
     def __init__(self, game_instance):
@@ -40,7 +40,7 @@ class MapWindow(InteractiveWindow):
         self.row_4 = self.row_3 + self.y_spacing
 
         self.info_ui = [
-            TextObject(None, f'Select a table to view info', self.col_4-20, self.row_2, 12, black),
+            TextObject(None, f'Select a table to view info', self.col_4 - 20, self.row_2, 12, black),
             TextObject(None, 'Info', self.col_3, self.y + 120, 36, black)
         ]
         self.ui_elements = [
@@ -111,10 +111,10 @@ class MapWindow(InteractiveWindow):
             TextObject(None, f'{table.npcs[3].ip}', self.col_4, row_3, 12, black),
 
             # Mac Addresses
-            TextObject(None, f'{table.npcs[0].mac}', self.col_4, row_0+20, 12, black),
-            TextObject(None, f'{table.npcs[1].mac}', self.col_4, row_1+20, 12, black),
-            TextObject(None, f'{table.npcs[2].mac}', self.col_4, row_2+20, 12, black),
-            TextObject(None, f'{table.npcs[3].mac}', self.col_4, row_3+20, 12, black),
+            TextObject(None, f'{table.npcs[0].mac}', self.col_4, row_0 + 20, 12, black),
+            TextObject(None, f'{table.npcs[1].mac}', self.col_4, row_1 + 20, 12, black),
+            TextObject(None, f'{table.npcs[2].mac}', self.col_4, row_2 + 20, 12, black),
+            TextObject(None, f'{table.npcs[3].mac}', self.col_4, row_3 + 20, 12, black),
         ]
 
     def display(self) -> None:
