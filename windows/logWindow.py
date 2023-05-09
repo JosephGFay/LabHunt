@@ -62,7 +62,7 @@ class LogWindow(InteractiveWindow):
         self.x = 100
         self.w = 1000
         self.h = 600
-        self.img = pygame.image.load('assets/map_window.png')
+        self.img = pygame.image.load('assets/log_window.png')
         self.img = pygame.transform.scale(self.img, (self.w, self.h))
 
         self.feed_status = True
@@ -77,20 +77,20 @@ class LogWindow(InteractiveWindow):
         self.col_2 = self.col_1 + self.x_spacing - 50
         self.col_3 = self.col_2 + self.x_spacing - 130
 
-        self.row_0 = self.y + self.h - 50
+        self.row_0 = self.y + self.h - 130
         self.row_1 = self.y
         self.row_2 = self.row_1
         self.row_3 = self.row_2
         self.row_4 = self.row_3
 
         self.ui_elements = [
-            TextObject(None, f'Source', self.col_0, self.y + 80, 12),
-            TextObject(None, f'Destination', self.col_1, self.y + 80, 12),
-            TextObject(None, f'Protocol', self.col_2, self.y + 80, 12),
-            TextObject(None, f'Info', self.col_3, self.y + 80, 12),
-            ButtonObject(self.x + self.w - 170 + 5, self.y + 80, 40, 40, 'assets/green.png',
+            TextObject(None, f'Source', self.col_0, self.y + 80, 12, (0, 0 , 0)),
+            TextObject(None, f'Destination', self.col_1, self.y + 80, 12, (0, 0 , 0)),
+            TextObject(None, f'Protocol', self.col_2, self.y + 80, 12, (0, 0 , 0)),
+            TextObject(None, f'Info', self.col_3, self.y + 80, 12, (0, 0 , 0)),
+            ButtonObject(self.x + self.w - 130, self.y + 120, 40, 40, 'assets/green.png',
                          object_id='serv_button_START'),
-            ButtonObject(self.x + self.w - 120 + 5, self.y + 80, 40, 40, 'assets/red.png',
+            ButtonObject(self.x + self.w - 130, self.y + 180, 40, 40, 'assets/red.png',
                          object_id='serv_button_STOP'),
 
         ]
@@ -115,7 +115,8 @@ class LogWindow(InteractiveWindow):
         # initialize log index at the beginning of the log list.
 
         while True:
-            self.populate_menu_options(self.ui_elements + self.log_text)
+
+            self.populate_menu_options(self.log_text+ self.ui_elements)
 
             # Display the background dialog window
             self.game_instance.game_window.blit(self.img, (self.x, self.y))
@@ -387,14 +388,23 @@ class LogWindow(InteractiveWindow):
         Args:
         - game_instance: An instance of the game, used to access the game window.
         """
-        for index, selection in enumerate(self.menu_options):
-            if self.y + 80 <= selection.y <= self.row_0:
+        for index, selection in enumerate(self.log_text):
+            if self.y + 120 <= selection.y <= self.row_0:
                 if index == self.selection:
                     self.img_sel = pygame.transform.scale(self.img_sel, (selection.w, selection.h))
                     self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
                     self.game_instance.game_window.blit(self.img_sel, (selection.x, selection.y))
                 else:
                     self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
+
+        for index, selection in enumerate(self.ui_elements):
+            if index == self.selection:
+                self.img_sel = pygame.transform.scale(self.img_sel, (selection.w, selection.h))
+                self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
+                self.game_instance.game_window.blit(self.img_sel, (selection.x, selection.y))
+            else:
+                self.game_instance.game_window.blit(selection.img, (selection.x, selection.y))
+
 
     def move_text_up(self) -> None:
         """

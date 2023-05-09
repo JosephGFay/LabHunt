@@ -2,7 +2,7 @@ from windows.interactiveWindow import InteractiveWindow
 from windows.ui_Object import UIObject
 from windows.ui_InteractableObject import UIInteractableObject
 from dialog.textObject import TextObject
-
+from windows.endWindow import EndWindow
 import pygame
 import sys
 from pygame.locals import QUIT
@@ -126,8 +126,15 @@ class ShoulderWindow(InteractiveWindow):
                         if Joetilities.utilities.get_mouse_collision(mouse_pos, selection):
                             if selection.object_id == 'accuse_button':
                                 if student.infected:
-                                    print('You win')
+                                    EndWindow(game_instance, 'You win')
                                 else:
-                                    print('You lose')
+                                    if game_instance.attempts == 1:
+                                        message = 'You Lose'
+                                    else:
+                                        message = 'Incorrect'
+
+                                    # Decrement the attempts
+                                    game_instance.attempts -= 1
+                                    EndWindow(game_instance, message)
 
             pygame.display.update()

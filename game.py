@@ -5,6 +5,7 @@ from pygame.locals import QUIT
 import os
 # Import NPC Data
 from data.npc_data import npc_data
+from dialog.textObject import TextObject
 
 # Import Game Objects
 from gameObjects.gameObject import GameObject
@@ -101,6 +102,8 @@ class GameInstance:
         self.tick_rate = 120
         # Initialize the dialog_running state. (Off by Default)
         self.dialog_running = False
+        # Initialize the default attempt amount.
+        self.attempts = 3
         # Initialize the interaction_running state. (Off by Default)
         self.interaction_running = False
         # Initialize data
@@ -120,9 +123,6 @@ class GameInstance:
         self.player_direction_y = 0
         self.player_direction_x = 0
 
-        # Initialize Toolbar
-        self.menu = ToolBar(0, 0, self.WIDTH, 32, 'assets/gamebar.png')
-
         # Initialize all table objects.
         self.table0 = Table(100, 530, 160, 160, 'assets/table_red.png', '0', self.npc_data)
         self.table1 = Table(100, 270, 160, 160, 'assets/table_blue.png', '1', self.npc_data)
@@ -130,6 +130,7 @@ class GameInstance:
         self.table3 = Table(450, 670, 160, 160, 'assets/table_red.png', '3', self.npc_data)
         self.table4 = Table(550, 400, 160, 160, 'assets/table_blue.png', '4', self.npc_data)
         self.table5 = Table(850, 250, 160, 160, 'assets/table_red.png', '5', self.npc_data)
+
         # Initialize and populate table list
         self.tables = [
             self.table0,
@@ -259,6 +260,8 @@ class GameInstance:
         # Draw Carpet
         self.game_window.blit(self.background.img, (self.background.x, self.background.y))
 
+        TextObject(self, f'Attempts Left: {self.attempts}', 10, 10, size=16, color=(255, 0, 0))
+
         # Draw and animate tvs
         folder_path = 'assets/tv_left'
         folder_contents = os.listdir(folder_path)
@@ -279,15 +282,6 @@ class GameInstance:
         self.game_window.blit(self.tv_left.img, (self.tv_left.x, self.tv_left.y))
         self.game_window.blit(self.tv_right.img, (self.tv_right.x, self.tv_right.y))
 
-        # Draw Menu Bar
-        self.game_window.blit(self.menu.img, (self.menu.x, self.menu.y))
-        self.game_window.blit(self.menu.text, self.menu.textRect)
-
-        # # Set an infected NPC
-        # for table in self.tables:
-        #     for seat in table.npcs:
-        #         seat.check_infected()
-
         # Draw Object List
         for object_list in self.objects:
             for game_object in object_list:
@@ -296,7 +290,6 @@ class GameInstance:
         # Draw Table List
         for table in self.tables:
             self.game_window.blit(table.img, (table.x, table.y))
-            self.game_window.blit(table.text, table.textRect)
             for npc in table.npcs:
                 self.game_window.blit(npc.img, (npc.x, npc.y))
 

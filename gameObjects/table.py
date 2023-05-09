@@ -71,10 +71,6 @@ class Table(GameObject):
             npc_data['macs'].pop()
 
     def render(self):
-        self.font = pygame.font.Font('freesansbold.ttf', 16)
-        self.text = self.font.render(self.name, True, green)
-        self.textRect = self.text.get_rect()
-        self.textRect.center = (self.x + 80, self.y + 70)
         if self.infected:
             self.set_hacker()
 

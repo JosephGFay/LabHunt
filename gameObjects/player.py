@@ -99,7 +99,7 @@ class Player(GameObject):
         if self.can_interact:
             # Render Table Interaction
             if self.adjacent_object.__class__.__name__ == 'Table':
-                self.text = self.font.render(f'E to Attempt Shoulder Surf', True, green)
+                self.text = self.font.render(f'E to Shoulder Surf', True, green)
             elif self.adjacent_object.__class__.__name__ == 'Server':
                 self.text = self.font.render(f'E to Interact with Server', True, green)
 
