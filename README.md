@@ -3,10 +3,13 @@
 A game of deduction where the player must monitor and examine students within the lab in order to expose the bad actor.
 
 # Installation
+
+1. Download and unzip the repository.
+
+2. Install any dependencies (pygame)
 ```
 pip install requirements.txt
 ```
-
 # Running the game
 The entry point for the program is main.py
 
