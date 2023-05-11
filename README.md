@@ -14,7 +14,12 @@ pip install requirements.txt
 The entry point for the program is main.py
 
 # Controls
-Use WASD to move around with the player character. E allows for interaction when the on-screen prompt appears.
+Use WASD to move around with the player character.
+
+E allows for interaction when the on-screen prompt appears.
+
+Press ESC to close open dialog windows.
+
 
 # Design/Functionality
 The game randomly generates number values in order to populate the tables with random students.
