@@ -3,7 +3,7 @@
 A game of deduction where the player must monitor and examine students within the lab in order to expose the bad actor.
 
 # Running the game
-The entry point for the program is game.py
+The entry point for the program is main.py
 
 # Controls
 Use WASD to move around with the player character. E allows for interaction when the on-screen prompt appears.
