@@ -2,6 +2,12 @@
 # Lab Hunt
 A game of deduction where the player must monitor and examine students within the lab in order to expose the bad actor.
 
+# Running the game
+The entry point for the program is game.py
+
+# Controls
+Use WASD to move around with the player character. E allows for interaction when the on-screen prompt appears.
+
 # Design/Functionality
 The game randomly generates number values in order to populate the tables with random students.
 A random student is chosen to be the hacker.
